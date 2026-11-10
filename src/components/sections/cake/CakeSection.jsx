@@ -130,7 +130,6 @@ export function CakeSection() {
                   index={index}
                   total={COUNT}
                   lit={on}
-                  reduced={reduced}
                   angle={ring[index].angle}
                   onExtinguish={() => extinguish(index)}
                   onRelight={() => relight(index)}
