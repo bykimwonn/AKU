@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import siteConfig from '../src/config/site.config.js';
-import { buildGallery } from '../src/utils/photos.js';
+import { buildGallery } from '../src/utils/gallery.js';
+import { ART_KEYS } from '../src/components/sections/gallery/MemoryArt.jsx';
 import { describeBirthday } from '../src/utils/date.js';
-import { interpolate, prettifyFileName } from '../src/utils/text.js';
+import { interpolate } from '../src/utils/text.js';
 import { SECTIONS } from '../src/config/sections.js';
 
 /**
@@ -55,10 +56,34 @@ describe('the personalisation config', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('asks the same questions of the gallery placeholders', () => {
-    const frames = siteConfig.gallery.placeholders;
-    expect(frames.length).toBeGreaterThanOrEqual(4);
-    frames.forEach((frame) => expect(frame.caption).toBeTruthy());
+  it('asks the same questions of the gallery frames', () => {
+    const cards = siteConfig.gallery.cards;
+    expect(cards.length).toBeGreaterThanOrEqual(4);
+    cards.forEach((card) => {
+      expect(card.title).toBeTruthy();
+      // Every frame has to say something — it is the whole point of the chapter.
+      expect(card.line.trim().length).toBeGreaterThan(20);
+      expect(ART_KEYS, `"${card.art}" is not a drawing that exists`).toContain(card.art);
+    });
+    expect(new Set(cards.map((card) => card.art)).size).toBe(cards.length);
+  });
+
+  it('signs the letters with a real name and the line she should hear', () => {
+    expect(siteConfig.sender.name).toBe('Bongani Tshuma');
+    expect(siteConfig.signature.name).toBe('Bongani Tshuma');
+    expect(siteConfig.signature.line.toLowerCase()).toBe('i love you');
+    // Nothing in the finished site may read like an instruction to the owner.
+    const visible = JSON.stringify({
+      gallery: siteConfig.gallery,
+      envelope: siteConfig.envelope,
+      letter: siteConfig.letter,
+      gifts: siteConfig.gifts,
+      cake: siteConfig.cake,
+      goodbye: siteConfig.goodbye,
+    });
+    for (const phrase of ['src/assets', 'config', 'placeholder', 'npm run', 'add your own', 'drop ']) {
+      expect(visible.toLowerCase(), `the visitor should never see "${phrase}"`).not.toContain(phrase);
+    }
   });
 
   it('lists a chapter for every section the app renders', () => {
@@ -102,50 +127,33 @@ describe('name tokens', () => {
     expect(interpolate('Nothing to swap here.')).toBe('Nothing to swap here.');
   });
 
-  it('turns a camera file name into a readable caption', () => {
-    expect(prettifyFileName('IMG_2043 (1).jpg')).toBe('Photo 2043');
-    expect(prettifyFileName('garden-party.jpg')).toBe('Garden party');
-    expect(prettifyFileName('DSC0012.png')).toBe('Photo 0012');
-    expect(prettifyFileName('us two.jpg')).toBe('Us two');
-    expect(prettifyFileName('03-garden-evening.png')).toBe('Garden evening');
-    expect(prettifyFileName('her-smile.jpg.png')).toBe('Her smile');
-    expect(prettifyFileName('')).toBe('A memory');
-  });
 });
 
 describe('the gallery builder', () => {
-  it('falls back to empty frames while no photographs exist', () => {
+  it('turns the config into frames that need nothing added', () => {
     const gallery = buildGallery(siteConfig);
-    expect(gallery.hasPhotos).toBe(false);
-    expect(gallery.items).toHaveLength(siteConfig.gallery.placeholders.length);
-    gallery.items.forEach((item) => expect(item.placeholder).toBe(true));
+    expect(gallery.count).toBe(siteConfig.gallery.cards.length);
+    expect(gallery.items).toHaveLength(gallery.count);
+    gallery.items.forEach((item) => {
+      expect(item.art).toBeTruthy();
+      expect(['gold', 'rose', 'plum', 'cream']).toContain(item.tone);
+      expect(item.title).toBeTruthy();
+    });
   });
 
-  it('accepts a captioned photo given as a URL in the config', () => {
+  it('fills in a tone and skips an empty card instead of showing a hole', () => {
     const gallery = buildGallery({
-      ...siteConfig,
       gallery: {
-        ...siteConfig.gallery,
-        items: [{ src: 'https://example.com/a.jpg', caption: 'A framed test', date: 'Nov 2026' }],
+        cards: [{ title: 'One', line: 'A line.', art: 'dawn' }, {}, { title: 'Two', tone: 'gold' }],
       },
     });
-
-    expect(gallery.hasPhotos).toBe(true);
-    expect(gallery.items).toHaveLength(1);
-    expect(gallery.items[0]).toMatchObject({
-      caption: 'A framed test',
-      date: 'Nov 2026',
-      placeholder: false,
-    });
+    expect(gallery.items).toHaveLength(2);
+    expect(gallery.items[0].tone).toBe('gold');
+    expect(gallery.items[1]).toMatchObject({ title: 'Two', tone: 'gold', line: '' });
   });
 
-  it('uses a readable caption when a photo has no config entry', () => {
-    const gallery = buildGallery({
-      ...siteConfig,
-      gallery: { ...siteConfig.gallery, items: [{ src: 'https://example.com/sunset-2.jpg' }] },
-    });
-
-    expect(gallery.items[0].caption).toBe('Sunset 2');
+  it('survives a config with no gallery at all', () => {
+    expect(buildGallery({}).items).toEqual([]);
   });
 });
 

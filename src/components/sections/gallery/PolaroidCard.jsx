@@ -1,37 +1,17 @@
 import { motion } from 'framer-motion';
 import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion.js';
 import { EASE } from '../../ui/Reveal.jsx';
+import { MemoryArt } from './MemoryArt.jsx';
 import './gallery.css';
 
 /** Deterministic, gentle scatter so the grid feels pinned to a wall, not tabled. */
-const TILTS = [-2.1, 1.5, -1.2, 2.3, -1.7, 1.1, -2.4, 1.9];
-
-export function EmptyFrame({ tone = 'rose' }) {
-  return (
-    <span className={`empty-frame empty-frame--${tone}`} aria-hidden="true">
-      <span className="empty-frame__glow" />
-      <svg viewBox="0 0 120 150" className="empty-frame__art" focusable="false">
-        <path
-          d="M12 118 L44 74 L66 100 L82 84 L108 118"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity="0.55"
-        />
-        <circle cx="84" cy="36" r="13" fill="none" stroke="currentColor" strokeWidth="1.4" opacity="0.42" />
-        <path d="M12 132 h96" stroke="currentColor" strokeWidth="1" opacity="0.22" />
-      </svg>
-      <span className="empty-frame__label">empty frame</span>
-    </span>
-  );
-}
+const TILTS = [-2.1, 1.5, -1.2, 2.3, -1.7, 1.1];
 
 /**
- * One polaroid in the gallery. It is a real button, so it works with a
- * keyboard, a thumb, or a screen reader — and the photograph itself stays
- * decorative because the caption carries the meaning.
+ * One frame in the gallery: a drawing, a handwritten line, and a tap that
+ * opens it properly. It is a real button, so it works with a keyboard, a thumb,
+ * or a screen reader. The drawing itself is decorative — the title carries the
+ * meaning, and the full sentence is read out inside the viewer.
  */
 export function PolaroidCard({ item, index, onOpen }) {
   const reduced = usePrefersReducedMotion();
@@ -49,35 +29,22 @@ export function PolaroidCard({ item, index, onOpen }) {
         type="button"
         className="polaroid"
         onClick={onOpen}
-        aria-label={
-          item.placeholder
-            ? `Empty frame — ${item.caption}`
-            : `Open photograph: ${item.caption}${item.date ? `, ${item.date}` : ''}`
-        }
+        aria-label={`Open frame: ${item.title}. ${item.line}`}
         whileHover={reduced ? undefined : { y: -10, rotate: 0, scale: 1.02 }}
         whileFocus={reduced ? undefined : { y: -10, rotate: 0 }}
         whileTap={reduced ? undefined : { scale: 0.985 }}
         transition={{ duration: 0.5, ease: EASE }}
       >
         <span className="polaroid__frame">
-          {item.placeholder ? (
-            <EmptyFrame tone={item.tone} />
-          ) : (
-            <img
-              className="polaroid__photo"
-              src={item.src}
-              alt=""
-              loading={index < 3 ? 'eager' : 'lazy'}
-              decoding="async"
-              draggable="false"
-            />
-          )}
+          <MemoryArt art={item.art} tone={item.tone} className="polaroid__art" />
           <span className="polaroid__gloss" aria-hidden="true" />
         </span>
 
         <span className="polaroid__meta">
-          <span className="polaroid__caption">{item.caption}</span>
-          {item.date ? <span className="polaroid__date">{item.date}</span> : null}
+          <span className="polaroid__caption">{item.title}</span>
+          <span className="polaroid__index" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
         </span>
       </motion.button>
     </motion.li>

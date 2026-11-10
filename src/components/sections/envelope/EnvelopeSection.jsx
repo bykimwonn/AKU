@@ -8,6 +8,7 @@ import { SectionShell } from '../../ui/SectionShell.jsx';
 import { Overlay } from '../../ui/Overlay.jsx';
 import { EASE, Reveal } from '../../ui/Reveal.jsx';
 import { Stagger, StaggerItem } from '../../ui/Stagger.jsx';
+import { Signature } from '../../ui/Signature.jsx';
 import './envelope.css';
 
 /**
@@ -183,9 +184,10 @@ export function EnvelopeSection({ onJump }) {
 
             <StaggerItem as="p" className="letter__signoff">
               <span className="letter__signoff-line">{envelope.signOff}</span>
-              {siteConfig.sender?.name ? (
-                <span className="letter__signoff-name u-hand">{siteConfig.sender.name}</span>
-              ) : null}
+            </StaggerItem>
+
+            <StaggerItem as="div">
+              <Signature tone="paper" />
             </StaggerItem>
           </Stagger>
         </article>

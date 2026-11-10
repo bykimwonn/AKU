@@ -280,10 +280,10 @@
 
 .letter__signoff {
   display: grid;
-  justify-items: end;
+  justify-items: center;
   gap: 0.1rem;
-  margin-block-start: clamp(0.6rem, 2vw, 1.2rem);
-  text-align: end;
+  margin-block-start: clamp(1rem, 3vw, 1.6rem);
+  text-align: center;
 }
 
 .letter__signoff-line {
@@ -293,9 +293,8 @@
   color: var(--ink-soft);
 }
 
-.letter__signoff-name {
-  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.3rem);
-  color: var(--burgundy);
+.letter .signature {
+  margin-block-start: clamp(0.5rem, 2vw, 0.9rem);
 }
 
 .envelope__foot-note {

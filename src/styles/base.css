@@ -144,10 +144,6 @@ ul {
   margin: 0;
 }
 
-.u-title {
-  font-size: var(--fs-display);
-}
-
 .u-lead {
   font-size: var(--fs-subtitle);
   color: var(--blush-dim);

@@ -1,231 +1,201 @@
-# A Little Universe Of Love
+# AKUDZWEISHE — A Little Universe Of Love
 
-A personalised, interactive birthday experience for **AKUDZWEISHE** — built as a single-page
-React app: a cinematic opening, a sealed envelope, a memory gallery, a long letter, three
-wrapped gifts, a cake with real candles, and a goodbye worth replaying.
+A complete, interactive birthday website — a single-page React app with a cinematic opening, a
+sealed letter, six drawn frames, a long letter, three gifts, a cake with candles she has to blow
+out, and a goodbye that signs itself **Bongani Tshuma · I love you**.
 
-No backend. No database. No accounts. Everything she reads lives in **one config file**, every
-photograph in **one folder**, and the song in **one more folder**.
+**It is finished.** Nothing has to be photographed, downloaded, or written for the site to work.
+The words are in one file if you ever want to change them; the drawings are code, not assets.
 
 ```
-npm install     →   npm run dev   →   open the printed http://localhost:5173
+npm install   →   npm run dev   →   open the printed http://localhost:5173
 ```
+
+Live site: **https://bykimwonn.github.io/AKU/** (GitHub Pages, built from `dist/` on the
+`gh-pages` branch — see §4).
 
 ---
 
-## 1. Contents at a glance
+## 1. What she goes through
 
-| Chapter | What she sees | Where the words live |
-| --- | --- | --- |
-| 1. Opening | Her name in gold, a starfield, one button | `welcome` |
-| 2. The envelope | A wax-sealed letter that opens, then unfolds into a readable letter | `envelope` |
-| 3. The gallery | Polaroid frames, click to enlarge, prev/next, swipe on phones | `gallery` + `src/assets/photos/` |
-| 4. Things I Don't Always Say… | The long letter, set on paper | `letter` |
-| 5. Three gifts | Three boxes; each opens with its own reveal effect | `gifts` |
-| 6. The cake | Candles you can blow out (or tap), confetti, then the final message | `cake` |
-| 7. Goodbye | A constellation that draws itself, and a replay button | `goodbye` |
+| # | Chapter | What happens | Config key |
+| --- | --- | --- | --- |
+| 1 | Opening | Her name in gold, letters arriving one at a time, a starfield with drifting light, one button. The page behind stays locked until she presses it. | `welcome` |
+| 2 | The envelope | A wax seal cracks, the flap swings back in 3D, the page lifts out of the pocket, and the letter opens as a readable sheet. Re-openable, `Esc`-closable. | `envelope` |
+| 3 | Six frames | Six original line drawings taped to a dark wall — crooked until touched, then opening into a viewer with prev/next, arrow keys and swipe. Each carries one sentence. | `gallery` |
+| 4 | Things I Don't Always Say… | The long letter on paper: drop cap, 1.95 line-height, paragraphs that settle as they arrive. | `letter` |
+| 5 | Three gifts | Three boxes; the lid and bow fly off and light spills out. Each reveal is different — lines write themselves out, a creased note unfolds, wishes rise with sparks. | `gifts` |
+| 6 | The cake | Two tiers, dripping frosting, candles flickering on their own timings. Tap one out for a curl of smoke or blow the whole row in one gust → confetti, petals, the final message. Any candle can be relit. | `cake` |
+| 7 | Goodbye | A constellation draws itself, the closing lines, **the signature**, and a replay button. | `goodbye`, `signature` |
 
-Plus the always-there bits: a header with a **Chapters** menu, a **music player**, a gold reading
-progress line, floating rose petals, and — on desktop — a rail of chapter dots.
+Always present: a header with a **Chapters** menu, the **music player**, a gold reading-progress
+line, floating rose petals, and a rail of chapter dots on desktop.
 
 ---
 
-## 2. Make it hers
+## 2. Editing the words (optional)
 
-### 2.1 The words — one file
-
-**`src/config/site.config.js`** is the only file you need to open. It is commented, and every
-field has a sensible default so the site never shows a hole.
+**`src/config/site.config.js`** is the only file to open. Every field is commented; leaving a
+field `""` hides it quietly rather than breaking the page.
 
 ```js
-recipient: {
-  name: 'AKUDZWEISHE',        // the big display name
-  salutation: 'Akudzweishe',  // how she is addressed in sentences
+recipient: { name: 'AKUDZWEISHE', salutation: 'Akudzweishe' },
+sender:    { name: 'Bongani Tshuma' },
+birthdayDate: 'auto',        // or '2026-11-20' for a real countdown / count-up
+signature: {
+  eyebrow: 'From',
+  name: 'Bongani Tshuma',
+  line: 'I love you',
+  whisper: 'Today, tomorrow, and every ordinary Tuesday in between.',
 },
-sender: { name: '' },         // put your name here to sign the letters
-birthdayDate: 'auto',         // 'auto' = today, or '2026-12-03'
 ```
 
-Two tokens work anywhere in the text, so you never type her name twice:
+Tokens: `{name}` and `{NAME}` are replaced anywhere in the copy with the recipient's name —
+useful if a sentence needs her name in it.
 
-- `{name}` → `recipient.salutation`
-- `{NAME}` → `recipient.name`
+### The six frames
 
-`paragraphs` / `intro` / `body` are arrays — **one entry per paragraph**. Add as many as you like;
-the layout absorbs them. Leave any optional string `""` and that line hides itself.
+Each frame is `{ id, art, tone, title, line }`. `art` chooses the drawing —
+`dawn · night · bloom · letters · storm · wish` — and `tone` the wash (`gold · rose · plum ·
+cream`). An unknown `art` falls back to `wish`, so a typo can never show her a blank card.
+Add or remove frames freely: the grid, the counter and the prev/next buttons all follow.
 
-> **A note on honesty.** The default copy is written to be warm without inventing anything: no
-> shared memories, no claims about a relationship, no "since the day we met". When you replace it,
-> the specific and true always beats the poetic and generic — one real detail is worth ten
-> beautiful sentences.
+### Music
 
-### 2.2 Photographs — one folder
+`music.src: ''` (the default) plays a soft **original ambient loop generated in the browser**
+by `src/audio/ambientEngine.js` — an A♭ chord loop with a sparse music-box melody and convolution
+reverb. Nothing to download, nothing copyrighted, no audio file in the repo.
 
-```
-src/assets/photos/
-   01-her-laugh.jpg
-   02-golden-hour.jpg
-   …
-```
+Want a specific song instead? Put one file in `public/audio/` and set
+`music.src: 'audio/our-song.mp3'`. It still never autoplays: it starts on the click that opens
+the site, and if she pauses it once, it stays paused. Volume and mute are remembered between
+visits.
 
-- Drop in **JPG / PNG / WebP / AVIF / GIF**; they appear in the gallery automatically, in file-name
-  order (a leading number is a handy way to sequence them).
-- **No code changes required.** Captions default to a tidied version of the file name.
-- Want real captions and dates? Add them to `gallery.items`:
-
-```js
-items: [
-  { file: '01-her-laugh.jpg', caption: 'The laugh that fixes a bad day.', date: 'June 2025' },
-  { file: '02-golden-hour.jpg', caption: 'Golden hour, and you in it.',  date: 'December 2025' },
-],
-```
-
-- Frames are cropped **4:5 portrait** (`object-fit: cover`), so portrait photos lose nothing.
-- Long edge **~1600px** is plenty; Vite compresses and hashes them at build time. 6–9 photos is
-  the sweet spot.
-- Until there are photos, the gallery shows **empty frames** — deliberate. Stray internet photos
-  of strangers pretending to be your memories would cheapen the whole thing.
-- `npm run dev` shows a small reminder line about the folder. It is dev-only (`import.meta.env.DEV`),
-  so it never appears in the deployed site.
-
-### 2.3 Music — one file, or none at all
-
-The site already has music: a soft, original ambient piano loop (`src/audio/ambientEngine.js`)
-generated live by the Web Audio API — a slow A♭ loop with a sparse melody, reverb and a gentle
-fade-in. Nothing is downloaded, and nothing is copyrighted.
-
-To use **your own song** instead:
-
-1. Put the file in `public/audio/` — e.g. `public/audio/our-song.mp3` (keep it under ~10 MB).
-2. Point the config at it:
-
-```js
-music: {
-  src: 'audio/our-song.mp3',
-  title: 'The one we danced to',
-  startOnOpen: true,     // begins on the click of “Open Your Surprise”, never before a gesture
-  defaultVolume: 0.55,
-  remember: true,        // remembers her volume / mute between visits
-}
-```
-
-Rules the player follows: it never autoplays (the opening click is the gesture), it survives every
-section and overlay so the song never restarts, and `M` toggles play/pause from the keyboard. Only
-use a recording you have the right to share — a streaming-service link will not work.
-
-### 2.4 Tuning
+### Turning things off
 
 ```js
 effects: { petals: true, starfield: true, confetti: true }
 ```
 
-Turn any of them off for a lighter page on old phones. All three already stand down completely
-when the visitor's device asks for reduced motion.
+Any of these can be set to `false`. Separately, everything on the site already honours the
+visitor's own "reduce motion" setting: the petals, stars, confetti and staged animations stand
+down, and every interactive moment still delivers.
 
 ---
 
 ## 3. Commands
 
-| Command | Does |
+| Command | What it does |
 | --- | --- |
-| `npm install` | one time |
-| `npm run dev` | dev server with hot reload — edit the config and watch it change |
-| `npm run build` | production build into `dist/` |
-| `npm run preview` | serves the built site locally, to check it before deploying |
-| `npm run test` / `npm run test:run` | the vitest suite (interactions, config contract, music) |
+| `npm run dev` | Local dev server with hot reload. |
+| `npm run test:run` | The whole test suite (45 tests, jsdom). |
+| `npm run build` | Production build into `dist/`. |
+| `npm run preview` | Serves the built `dist/` locally — the closest thing to the real deployment. |
 
-The same commands work in **PowerShell** on Windows, and in any other shell.
+Node 20.19+ or 22+ is required (Vite 8).
 
 ---
 
-## 4. Putting it online
+## 4. Deploying (GitHub Pages — already set up)
 
-`vite.config.js` sets `base: './'`, and `public/.nojekyll` is already there, so the build works on
-a domain root, in a GitHub Pages project folder, or opened straight from disk.
+The site is deployed to **`https://bykimwonn.github.io/AKU/`** from the **`gh-pages`** branch,
+which contains a built copy of `dist/`. Pages was enabled with `gh api`, and `vite.config.js`
+uses `base: './'` with a `public/.nojekyll` file, so it works on a project sub-path.
 
-### GitHub Pages (free, ~2 minutes)
+After **any** change, rebuild and republish:
 
 ```bash
-npm run build
-npx gh-pages -d dist          # or: push dist/ to a gh-pages branch
+npm run build && npx gh-pages -d dist --message "Update the site"
 ```
 
-Then enable *Settings → Pages → Branch: gh-pages*. Your URL is
-`https://<user>.github.io/<repo>/`.
+Your URL does not change and it takes about a minute to go live. Also handy:
 
-### Netlify / Vercel / Cloudflare Pages
+```bash
+gh run list --repo bykimwonn/AKU            # if you ever switch to a workflow
+gh api repos/bykimwonn/AKU/pages --jq .status
+```
 
-Build command `npm run build`, publish directory `dist`. Nothing else to configure.
+**Other hosts.** Netlify Drop (drag the whole `dist` folder onto app.netlify.com/drop),
+Vercel (`npx vercel --prod`), or Render → *Static Site* with build command `npm run build`,
+publish directory `dist`, and env var `NODE_VERSION=22`. No configuration is needed for
+Netlify/Vercel; Render needs those three settings. `base: './'` means the same `dist` works on
+all of them.
 
-### Anywhere else
-
-Upload the contents of `dist/` to any static host. It is one HTML file, one JS bundle, one CSS file
-and the images — no server code to run.
-
-**Think about who else has the link.** A birthday page like this is not secret by design: anyone
-with the URL can read it. If that matters, host it on a service that can password-protect it (Netlify
-and Vercel both offer site password protection), or keep it on a private/unlisted URL and just tell
-her where to find it.
-
----
-
-## 5. What was verified
-
-- **42 automated tests** (`npm run test:run`) drive the real components: opening the experience,
-  the envelope's letter, re-reading it, the gallery lightbox and its arrow keys, all three gifts
-  opening and closing, candles going out one by one *and* in one gust, the celebration, relighting,
-  chapter jumps, the music player's play/pause/volume/mute, the reduced-motion path through the same
-  interactions, and the rule that a paused song is never auto-started again.
-- Adding photographs was verified by dropping real files into the folder and rendering the
-  gallery: they appear in name order, captions come from the file name unless configured, and the
-  empty frames disappear.
-- A **console test** walks the whole site and fails on any React warning or error — currently silent.
-- `npm run build` completes with no errors and no unresolved imports; every route in the app is an
-  anchor on one page, so there are no links that can break.
-- The config is covered by a **contract test**: if a required field is deleted, a test fails with the
-  field's name rather than the site showing her an empty section.
-
-Not verified in this environment: pixel-level rendering in a real browser (no browser binary was
-available here). Run `npm run dev`, look at it on your phone as well as your laptop, and adjust
-`--section-y` / `--gutter` in `src/styles/tokens.css` if you want more or less air.
+**Who else can see it.** A Pages site is public — anyone with the link can open it, and this
+repository is public too, so the source (and every previous version of the words) is readable by
+anybody. If that ever stops feeling fine: make the repo private, or move the deployment to
+Netlify/Render and put a password on it.
 
 ---
 
-## 6. Layout of the code
+## 5. Keyboard & accessibility
+
+- `Alt` + `↑` / `↓` walks between chapters.
+- `M` toggles the music.
+- `Esc` closes any open letter, gift or frame.
+- `←` / `→` step through the gallery frames; on a phone you can swipe.
+- A skip link appears for keyboard users, focus is trapped inside overlays and returned to the
+  control that opened them, and every interactive thing is a real `<button>`.
+
+---
+
+## 6. What was actually verified
+
+- `npm run test:run` → **45 passing**: the opening gate, the envelope (open, re-read, `Esc`),
+  the gallery (frames, opening, arrow-key stepping, the sentence inside, no broken `<img>`),
+  all three gifts opening and closing, candles one-by-one *and* in a gust, the celebration,
+  relighting, chapter jumps, the player's play/pause/volume/mute and pause-persistence, the
+  config contract (a missing required field fails, naming itself), and the reduced-motion path
+  through the same interactions.
+- A dedicated test walks the entire site and fails on **any** `console.error` or `console.warn`.
+- `npm run build` succeeds; every `url()` and font referenced by the built CSS resolves, and the
+  asset paths are relative so a sub-path deploy works.
+- Not verified here: pixel-level rendering in a real browser (the sandbox can't install a browser
+  binary). Open it on a phone once before sending the link.
+
+---
+
+## 7. How the code is arranged
 
 ```
 src/
-  config/
-    site.config.js      ← everything she reads
-    sections.js         ← the chapter list used by the navigation
-  components/
-    effects/            ← starfield + rose petals (canvas), one file each
-    ui/                 ← Reveal, SectionShell, Overlay, Stagger, TopBar, NavRail,
-                          ScrollProgress, MusicPlayer  (+ their .css)
-    sections/
-      welcome/  envelope/  gallery/  letter/  gifts/  cake/  goodbye/
-                          ← one folder per chapter: component(s) + its own CSS
-  hooks/                ← useMusicEngine, useActiveSection, useScrollLock,
-                          useCanvasLayer, usePrefersReducedMotion
-  utils/                ← text, date, photos, celebrate (confetti)
-  audio/ambientEngine.js ← the generated loop
-  styles/               ← tokens.css (palette, type scale), base.css, buttons.css, app.css
-tests/                  ← the vitest suite
+  App.jsx               ← the entering gate, active-section tracking, keyboard shortcuts
+  config/site.config.js ← every word on the site, including the signature
+  config/sections.js    ← the chapter list the nav and shortcuts read
+  styles/               ← tokens.css (palette, type scale), base, buttons, app
+  hooks/                ← music engine, active section, canvas layers, scroll lock, reduced motion
+  utils/                ← text tokens, birthday dates, gallery builder, confetti
+  audio/ambientEngine.js← the generative loop (Web Audio)
+  components/ui/        ← SectionShell, Overlay, Reveal, Stagger, Signature, MusicPlayer, TopBar,
+                          NavRail, ScrollProgress
+  components/effects/   ← petals + starfield canvases
+  components/sections/  ← welcome, envelope, gallery, letter, gifts, cake, goodbye
+                          (each component owns its own .css; the gallery's drawings live in
+                           gallery/MemoryArt.jsx)
+tests/                  ← experience, music, console, config
 ```
 
-Every section owns its component and its stylesheet, so deleting or reordering a chapter means
-touching one folder plus `App.jsx`.
+Sections are data-driven and never reach into each other's state: they read the config, keep
+their own open/closed state, and hand off with `onJump(sectionId)`. Adding a chapter means adding
+an entry to `src/config/sections.js` and rendering a component in `App.jsx`.
 
-### If something misbehaves
+Two conventions worth knowing before editing:
 
-| Symptom | Fix |
-| --- | --- |
-| Photos don't show | Check the extension and the folder (`src/assets/photos/`, not `public/`). Restart `npm run dev` so the glob re-runs. |
-| Own song doesn't play | `music.src` must match the file name **exactly**, including case: `audio/Our-Song.mp3`. Check the browser console for a 404. |
-| Fonts look different | They are bundled (`@fontsource`), so this means the build is stale — `rm -rf dist node_modules/.vite && npm run build`. |
-| Page feels heavy on an old phone | `effects: { petals: false, starfield: false }`. |
-| Music starts where you didn't want it | `music.startOnOpen: false` — she can start it from the player. |
+- Anything Framer Motion animates must not also have a CSS `transform` animation on the same
+  element — a wrapper owns the CSS transform, the inner element owns Framer's.
+- Reduced motion is read through `src/hooks/usePrefersReducedMotion.js` everywhere, never
+  directly from the media query or from Framer's hook alone.
 
 ---
 
-Made with love, especially for her.
+## 8. Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| The page never appears (blank) | JavaScript is off, or the build wasn't run after an edit. Check `npm run build` output for a syntax error in the config — a missing comma is the usual one. |
+| The letters look wrong after editing the config | A stray `"` or `,` broke the file. `node -e "import('./src/config/site.config.js')"` will point at the line. |
+| Music doesn't start | It never autoplays. Press the player, or click "Open Your Surprise" with `music.startOnOpen: true`. On a phone, one tap anywhere first is required by the browser. |
+| The ambient loop is silent on a very old browser | No Web Audio support → the player says so and stays out of the way. Add a file in `public/audio/` for a real track. |
+| Animations feel absent | The device has "reduce motion" on. That is intended behaviour, and every interaction still works. |
+| The deployed site looks stale | Rebuild and republish (`npm run build && npx gh-pages -d dist`). The `gh-pages` branch is a snapshot, not a live view of `main`. |
+| Candles/frames overflow on a small phone | Lower `cake.candleCount`; the gallery grid reflows on its own. |

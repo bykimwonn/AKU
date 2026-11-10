@@ -13,7 +13,7 @@ import { MotionConfig } from 'framer-motion';
 import App from '../src/App.jsx';
 import siteConfig from '../src/config/site.config.js';
 
-const LETTER_OPENING = /I wanted to do something a little different for you\./;
+const LETTER_OPENING = /I tried to write you an ordinary birthday message/;
 
 /** The whole site, mounted the way the browser mounts it. */
 function renderExperience() {
@@ -78,8 +78,10 @@ describe('the envelope', () => {
 
     const dialog = await screen.findByRole('dialog');
     expect(within(dialog).getByText(LETTER_OPENING)).toBeInTheDocument();
-    expect(within(dialog).getByText(/so i created this little corner of the world/i)).toBeInTheDocument();
-    expect(within(dialog).getByText(/dear akudzweishe,/i)).toBeInTheDocument();
+    expect(within(dialog).getByText(/so instead i built you a small world/i)).toBeInTheDocument();
+    expect(within(dialog).getByText(/Bongani Tshuma/)).toBeInTheDocument();
+    expect(within(dialog).getByText(/I love you/)).toBeInTheDocument();
+    expect(within(dialog).getByText(/my dearest akudzweishe,/i)).toBeInTheDocument();
 
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
@@ -91,15 +93,17 @@ describe('the envelope', () => {
 });
 
 describe('the gallery', () => {
-  it('shows empty frames rather than somebody else’s photographs', async () => {
+  it('shows the six drawn frames, complete on their own', async () => {
     const user = userEvent.setup();
     renderExperience();
     await openExperience(user);
 
-    const frames = await screen.findAllByRole('button', { name: /empty frame/i });
-    const expected = siteConfig.gallery.placeholders.length;
-    expect(frames).toHaveLength(expected);
-    expect(frames.length).toBeGreaterThan(0);
+    const frames = await screen.findAllByRole('button', { name: /open frame:/i });
+    expect(frames).toHaveLength(siteConfig.gallery.cards.length);
+    // Every frame is a real sentence, not an invitation to add something.
+    frames.forEach((frame, index) =>
+      expect(frame.getAttribute('aria-label')).toContain(siteConfig.gallery.cards[index].line),
+    );
   });
 
   it('expands a frame, steps through the gallery and closes', async () => {
@@ -107,21 +111,48 @@ describe('the gallery', () => {
     renderExperience();
     await openExperience(user);
 
-    const frames = await screen.findAllByRole('button', { name: /empty frame|open photograph/i });
+    const total = siteConfig.gallery.cards.length;
+    const frames = await screen.findAllByRole('button', { name: /open frame:/i });
     await user.click(frames[0]);
 
     const dialog = await screen.findByRole('dialog');
-    expect(await within(dialog).findByText(`1 / ${siteConfig.gallery.placeholders.length}`)).toBeInTheDocument();
-
+    expect(await within(dialog).findByText(`1 / ${total}`)).toBeInTheDocument();
     await user.keyboard('{ArrowRight}');
-    expect(await within(dialog).findByText(`2 / ${siteConfig.gallery.placeholders.length}`)).toBeInTheDocument();
+    expect(await within(dialog).findByText(`2 / ${total}`)).toBeInTheDocument();
 
     await user.keyboard('{ArrowLeft}');
     await user.keyboard('{ArrowLeft}');
-    expect(await within(dialog).findByText(`${siteConfig.gallery.placeholders.length} / ${siteConfig.gallery.placeholders.length}`)).toBeInTheDocument();
+    expect(await within(dialog).findByText(`${total} / ${total}`)).toBeInTheDocument();
 
-    await user.click(within(dialog).getByRole('button', { name: /close the photograph/i }));
+    await user.click(within(dialog).getByRole('button', { name: /close the frame/i }));
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('draws each frame as inline art, so there is nothing to load and nothing broken', async () => {
+    const user = userEvent.setup();
+    renderExperience();
+    await openExperience(user);
+
+    const frames = await screen.findAllByRole('button', { name: /open frame:/i });
+    frames.forEach((frame) => {
+      expect(frame.querySelector('svg.memory-art')).not.toBeNull();
+    });
+    // No photographs, therefore no broken image icons, ever.
+    expect(document.querySelectorAll('.polaroid img')).toHaveLength(0);
+  });
+
+  it('shows the sentence written for the frame she opened', async () => {
+    const user = userEvent.setup();
+    renderExperience();
+    await openExperience(user);
+
+    const cards = siteConfig.gallery.cards;
+    const frames = await screen.findAllByRole('button', { name: /open frame:/i });
+    await user.click(frames[2]);
+
+    const dialog = await screen.findByRole('dialog');
+    expect(await within(dialog).findByText(cards[2].line)).toBeInTheDocument();
+    expect(within(dialog).getByText(cards[2].title)).toBeInTheDocument();
   });
 });
 
@@ -226,6 +257,23 @@ describe('the goodbye', () => {
 
     expect(screen.getByText(siteConfig.goodbye.line1)).toBeInTheDocument();
     expect(screen.getByText(siteConfig.goodbye.line2)).toBeInTheDocument();
+  });
+
+  it('signs the very end, in full, with the line that matters', async () => {
+    const user = userEvent.setup();
+    renderExperience();
+    await openExperience(user);
+
+    const sign = document.querySelector('.goodbye__sign .signature');
+    expect(sign).not.toBeNull();
+    expect(sign.querySelector('.signature__eyebrow')).toHaveTextContent(
+      siteConfig.signature.eyebrow,
+    );
+    expect(sign.querySelector('.signature__name')).toHaveTextContent(siteConfig.sender.name);
+    expect(sign.querySelector('.signature__line')).toHaveTextContent(siteConfig.signature.line);
+    expect(sign.querySelector('.signature__whisper')).toHaveTextContent(siteConfig.signature.whisper);
+    // Her name is not signed anywhere — the signature block is the only one.
+    expect(sign.querySelectorAll('.signature__name')).toHaveLength(1);
   });
 });
 

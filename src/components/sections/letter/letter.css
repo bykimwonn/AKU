@@ -127,15 +127,8 @@
   max-width: 30ch;
 }
 
-.sheet__signoff {
-  font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.9rem);
-  color: var(--burgundy);
-  opacity: 0.92;
-}
-
-.sheet__signoff-note {
-  font-size: 0.68rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(51, 32, 46, 0.55);
+.sheet__sign {
+  display: grid;
+  justify-items: center;
+  margin-block-start: clamp(1.1rem, 3.5vw, 1.9rem);
 }

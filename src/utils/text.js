@@ -23,29 +23,6 @@ export function interpolateAll(value, config = siteConfig) {
   return interpolate(value, config);
 }
 
-/**
- * Turn a file name into something a human would write as a caption:
- *   "IMG_2043  (2).jpg"  ->  "IMG 2043 2"
- */
-export function prettifyFileName(fileName = '') {
-  const base = String(fileName)
-    // every trailing extension, so "her-smile.jpg.png" does not read "her smile.jpg"
-    .replace(/\.(jpe?g|png|webp|avif|gif|heic|heif|bmp|tiff?)$/gi, '')
-    .replace(/[-_]+/g, ' ')
-    // a leading 01- / 02_ is an ordering hint, not a caption
-    .replace(/^\d{1,3}[\s]+/, '')
-    .replace(/^(img|dsc|pxl|photo|gopr|mvi|vid)[\s]*/i, '')
-    .replace(/\s*\(\d+\)\s*/g, ' ')
-    .replace(/\.(jpe?g|png|webp|avif|gif|heic|heif|bmp)$/i, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  if (base.length < 3) return 'A memory';
-  // "2043" on its own is a file number, not a caption.
-  if (/^[\d\s]+$/.test(base)) return `Photo ${base.trim()}`;
-  return base.charAt(0).toUpperCase() + base.slice(1);
-}
-
 /** True when the visitor asked the OS to reduce motion. */
 export function prefersReducedMotion() {
   if (typeof window === 'undefined' || !window.matchMedia) return false;

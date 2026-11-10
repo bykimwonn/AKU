@@ -3,6 +3,7 @@ import siteConfig from '../../../config/site.config.js';
 import { interpolate } from '../../../utils/text.js';
 import { SectionShell } from '../../ui/SectionShell.jsx';
 import { Reveal } from '../../ui/Reveal.jsx';
+import { Signature } from '../../ui/Signature.jsx';
 import './letter.css';
 
 /**
@@ -60,15 +61,9 @@ export function LetterSection() {
               {interpolate(letter.closing)}
             </Reveal>
           ) : null}
-          {siteConfig.sender?.name ? (
-            <Reveal as="p" className="sheet__signoff u-hand" y={14} blur={4} delay={0.1}>
-              {siteConfig.sender.name}
-            </Reveal>
-          ) : (
-            <Reveal as="p" className="sheet__signoff-note" y={12} delay={0.1}>
-              — with love
-            </Reveal>
-          )}
+          <Reveal as="div" className="sheet__sign" y={14} blur={4} delay={0.1}>
+            <Signature tone="paper" />
+          </Reveal>
         </footer>
       </article>
     </SectionShell>

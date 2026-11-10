@@ -1,9 +1,0 @@
-Drop ONE audio file in here:  public/audio/
-
-• .mp3 is the safest format (works everywhere). .m4a / .ogg / .wav also work.
-• Then open src/config/site.config.js and set:
-      music: { src: 'audio/your-file-name.mp3', ... }
-• Keep the file under ~10 MB so the site stays quick to open on a phone.
-• Use a song you have the rights to share. If you would rather not worry about
-  that, leave music.src as '' — the site then plays a soft original ambient
-  loop generated live in the browser (no copyright, no download).

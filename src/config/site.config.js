@@ -1,63 +1,67 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   A LITTLE UNIVERSE OF LOVE  —  PERSONALISATION FILE
+   A LITTLE UNIVERSE OF LOVE  —  ALL THE WORDS
    ═══════════════════════════════════════════════════════════════════════════
 
-   This is the ONLY file you need to edit to make this website hers.
+   Everything on the website lives in this file. It is already finished — you
+   do not have to add photographs, audio or a single sentence to make it work.
 
-   • Everything between the quotes is plain text you can rewrite.
-   • "paragraphs" arrays = one entry per paragraph. Add or remove as you like.
-   • Leave a field as "" and the website will quietly hide it (nothing breaks).
-   • After editing, save the file. The browser updates instantly while
-     `npm run dev` is running.
+   • Text between the quotes can be rewritten whenever you like.
+   • "paragraphs" / "cards" arrays = one entry per paragraph or frame.
+   • Leave a field as "" and the site quietly hides it (nothing breaks).
+   • Tokens: {name} = her name in a sentence, {NAME} = the display version.
 
-   Photos and music are NOT stored here — see the folders:
-      src/assets/photos/   → drop image files here (they appear automatically)
-      public/audio/        → drop one music file here, then set `music.src`
-   Full instructions are in README.md.
-
-   NOTE ON WORDING: the default text below is written to be warm but honest —
-   it never invents memories or claims a relationship. Replace it with your own
-   true words wherever you can. Specific always beats poetic.
+   After editing, save. The live site updates instantly while `npm run dev`
+   is running; for the deployed version run `npm run build` and redeploy.
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export const siteConfig = {
   /* ───────────────────────── 1. THE BASICS ───────────────────────── */
 
   brand: {
-    /** Shown in the browser tab and used as the share title. */
+    /** Browser tab title and the link preview title. */
     title: '{NAME} — A Little Universe Of Love',
     /** Small label in the top corner of the site. */
     wordmark: 'A Little Universe Of Love',
-    /** Shown next to the wordmark on the intro screen. */
+    /** Under the wordmark on the opening screen. */
     edition: 'A birthday experience',
   },
 
   recipient: {
     /** Uppercase display name on the opening screen. */
     name: 'AKUDZWEISHE',
-    /**
-     * Tokens you can use anywhere below: {name} = her name as written in
-     * sentences, {NAME} = the uppercase display name.
-     */
-    /** How she is addressed in the letters (handwritten style). */
+    /** How she is addressed in the handwritten places. */
     handwritten: 'Akudzweishe',
     /** Used inside sentences, e.g. "Dear {salutation}". */
     salutation: 'Akudzweishe',
   },
 
-  /** Whoever made the site. Leave "" for an anonymous, signature-free letter. */
+  /** Whoever made this. Used by the signature block at the end of the letters. */
   sender: {
-    name: '',
+    name: 'Bongani Tshuma',
   },
 
   /**
-   * The birthday. Accepts 'YYYY-MM-DD' (month/day are what count).
-   * 'auto' = treat today as the day, so the site always reads correctly.
-   * Change to something like '2026-12-03' to get a real countdown / count-up.
+   * 'auto' = today is treated as her day, so the site always reads correctly.
+   * Set '2026-11-20' (YYYY-MM-DD) for a real countdown before the day and a
+   * count-up afterwards.
    */
   birthdayDate: 'auto',
 
-  /* ───────────────────────── 2. SECTION 1 — THE OPENING ───────────────────────── */
+  /* ───────────────────────── 2. THE SIGNATURE ─────────────────────────
+     Appears at the end of both letters and once, large, at the very end.  */
+
+  signature: {
+    /** Tiny line above the name. */
+    eyebrow: 'From',
+    /** Handwritten. */
+    name: 'Bongani Tshuma',
+    /** The words under the name, set in capitals with rules around them. */
+    line: 'I love you',
+    /** Optional last whisper beneath the signature. "" hides it. */
+    whisper: 'Today, tomorrow, and every ordinary Tuesday in between.',
+  },
+
+  /* ───────────────────────── 3. SECTION 1 — THE OPENING ───────────────────────── */
 
   welcome: {
     kicker: 'Some people deserve more than an ordinary birthday wish.',
@@ -68,65 +72,82 @@ export const siteConfig = {
     hint: 'Sound on, if you can. Headphones feel better.',
   },
 
-  /* ───────────────────────── 3. SECTION 2 — THE ENVELOPE ───────────────────────── */
+  /* ───────────────────────── 4. SECTION 2 — THE ENVELOPE ───────────────────────── */
 
   envelope: {
     eyebrow: 'Chapter One',
     title: 'A letter, sealed until now',
     subtitle: 'Tap the envelope to open it.',
-    /** The opening of the letter, shown first inside the letter. */
-    greeting: 'Dear {name},',
+    greeting: 'My dearest {name},',
     intro: [
-      'I wanted to do something a little different for you. Something that goes beyond an ordinary birthday message. Something you can open, explore and revisit whenever you want to remember how special you are.',
-      'So I created this little corner of the world, especially for you.',
+      'I tried to write you an ordinary birthday message and kept failing, because ordinary has never felt like enough for you. So instead I built you a small world — seven rooms, two letters, three gifts and a cake that refuses to behave until you blow out the candles.',
+      'Nothing in here needs you to be impressive, or entertaining, or worth it. You already are, and that was never the point. The point is that today somebody made you something by hand, on purpose, because of who you are.',
     ],
-    /** The rest of the letter. Add or remove paragraphs freely. */
     body: [
       'There are people who walk into a room and quietly make it better without trying. You are one of those people, and I don’t think you hear that often enough.',
-      'You matter — not because of what you do for anyone, not because of what you achieve, but because of who you are when nobody is watching. Kind. Stubborn about the things that are actually good. And far harder on yourself than this world ever needs you to be.',
-      'Today is the day that person arrived. That is the only reason this little universe exists: so that on the birthdays, and on the ordinary Tuesdays too, you have somewhere to go and be reminded.',
-      'Read it slowly. There are three gifts hiding further down, and a cake that will not behave until you blow out the candles.',
+      'You matter — not for what you do for anyone, not for what you achieve, but for who you are when nobody is watching. Kind. Stubborn about the things that are actually good. And far harder on yourself than this world ever had the right to make you.',
+      'There is one more thing I want to say, and it is not a difficult one: your name has always sounded to me like a blessing. So today let the whole day be that. Praise for the person you are, and gratitude that I got to be somewhere near it.',
+      'Read it slowly. Stay on the lines that land. There are three gifts further down, and a cake that only gives up its wish to someone brave enough to blow it out.',
     ],
-    signOff: 'Always in your corner',
+    signOff: 'All my love, always',
   },
 
-  /* ───────────────────────── 4. SECTION 3 — THE MEMORY GALLERY ───────────────────────── */
+  /* ───────────────────────── 5. SECTION 3 — THE FRAMES ─────────────────────────
+     Six drawings, each with one true sentence. No photographs required —
+     `art` chooses the illustration: dawn · night · bloom · letters · storm · wish */
 
   gallery: {
     eyebrow: 'Chapter Two',
-    title: 'A gallery of good days',
+    title: 'Six frames, drawn for you',
     subtitle:
-      'The photographs go here. Every picture you add earns its own frame, its own caption, and its own place in this universe.',
-    /**
-     * Optional captions for your own photos, matched by file name.
-     * You do NOT need this list — photos dropped in src/assets/photos/ appear
-     * automatically even if you never touch this array. Use it only to give a
-     * photo a proper caption and date.
-     *
-     *   { file: 'beach.jpg', caption: 'The day we finally made it to the sea.', date: 'Aug 2024' }
-     */
-    items: [
-      // { file: 'example.jpg', caption: 'Your caption here.', date: 'Month Year' },
+      'I left the photographs out and made these instead, so that every frame would say exactly what I mean. Tap one to step inside.',
+    cards: [
+      {
+        id: 'dawn',
+        art: 'dawn',
+        tone: 'gold',
+        title: 'You, at first light',
+        line: 'You are the rare person who makes a morning feel like good news.',
+      },
+      {
+        id: 'night',
+        art: 'night',
+        tone: 'plum',
+        title: 'You, when it gets late',
+        line: 'You answer when almost everyone else has gone quiet. I have never once taken that for granted.',
+      },
+      {
+        id: 'bloom',
+        art: 'bloom',
+        tone: 'rose',
+        title: 'How you grow',
+        line: 'You have been planted in such poor soil and you keep flowering anyway. That is not luck. That is you.',
+      },
+      {
+        id: 'letters',
+        art: 'letters',
+        tone: 'cream',
+        title: 'What you don’t say',
+        line: 'Even the things you keep to yourself land softer than most people’s compliments.',
+      },
+      {
+        id: 'storm',
+        art: 'storm',
+        tone: 'plum',
+        title: 'You, in the hard season',
+        line: 'When the year got loud, you got quieter and steadier. I noticed. I noticed all of it.',
+      },
+      {
+        id: 'wish',
+        art: 'wish',
+        tone: 'gold',
+        title: 'The wish I keep',
+        line: 'That this year treats you the way you treat everybody else. That would be more than enough.',
+      },
     ],
-    /**
-     * What the visitor sees before any photographs have been added.
-     * These are honest placeholders — never somebody else's face pretending to
-     * be a memory. Replace the whole array with real photos and it disappears.
-     */
-    placeholders: [
-      { caption: 'A moment worth keeping', date: '', tone: 'rose' },
-      { caption: 'The smile that says everything', date: '', tone: 'gold' },
-      { caption: 'Somewhere golden', date: '', tone: 'plum' },
-      { caption: 'The best of you, unposed', date: '', tone: 'cream' },
-      { caption: 'Sunlight, saved', date: '', tone: 'gold' },
-      { caption: 'Proof of joy', date: '', tone: 'rose' },
-    ],
-    /** Small print under the grid — only shown while frames are empty. */
-    ownerNote:
-      'Empty frames for now — add your own photographs to src/assets/photos/ and they will appear here instantly.',
   },
 
-  /* ───────────────────────── 5. SECTION 4 — THE HEARTFELT LETTER ───────────────────────── */
+  /* ───────────────────────── 6. SECTION 4 — THE HEARTFELT LETTER ───────────────────────── */
 
   letter: {
     eyebrow: 'Chapter Three',
@@ -134,23 +155,24 @@ export const siteConfig = {
     subtitle: 'Written slowly, on purpose.',
 
     /** The line above the letter. '' hides it. */
-    greeting: 'Dear {name},',
+    greeting: 'My dearest {name},',
 
     paragraphs: [
       'I don’t say it often enough, so let me say it plainly: I’m glad you exist. Of all the ways a person can move through this world, you chose to move through it gently — and that has not gone unnoticed, even on the days it felt like it had.',
       'You carry things you never asked to carry, and you still leave room in yourself to be kind to other people. That isn’t ordinary. Most people never notice it. I do.',
       'Thank you for the ways you show up — the ones people talk about, and the ones nobody will ever thank you for. The quiet effort is the rarest kind, and it is the kind that changes lives. Including one or two of mine.',
-      'When you doubt yourself, please don’t take my word for it. Look instead at what you have already survived, and at what you built afterwards with the pieces. That record speaks far better for you than any compliment I could write.',
-      'I hope this year is kinder than the last one. I hope you find rest that actually restores you, work that pays you what you’re worth, and love that never asks you to be smaller to be easier to love.',
-      'I hope your dreams stop being dreams. You already did the hard, unglamorous part — you kept wanting them, even quietly. Now let yourself go and take them. The world is less solid than it pretends to be.',
-      'And on the days you forget all of this, I hope you come back here and re-read it, so you leave with the same thing I leave with when I think of you: the steady, unremarkable certainty that you are valued, you are thought of, and good things are allowed to happen to you.',
+      'When you doubt yourself, don’t take my word for it. Look instead at what you have already survived, and at what you built afterwards out of the pieces. That record speaks far better for you than any compliment I could write.',
+      'I hope this year is kinder than the last one. I hope you find rest that actually restores you, work that pays you what you’re worth, and love that never asks you to be smaller in order to be easier to love.',
+      'I hope your dreams stop being dreams. You already did the hard, unglamorous part — you kept wanting them, even quietly. Now go and take them. The world is far less solid than it pretends to be.',
+      'And on the days you forget all of this, come back here and re-read it, so you leave with the same thing I leave with whenever I think of you: the steady, unremarkable certainty that you are valued, you are thought of, and good things are allowed to happen to you.',
     ],
 
-    /** Ends the letter. Written after the last paragraph. */
-    closing: 'Happy birthday, {name}.',
+    /** Ends the letter, before the signature. */
+    closing:
+      'Happy birthday, {name}. And now the part I have been circling all the way down here, the one that was the real reason for all of it: I love you. Not as an opening line, not as a goodbye — as a fact, with no conditions attached to it.',
   },
 
-  /* ───────────────────────── 6. SECTION 5 — THE THREE GIFTS ───────────────────────── */
+  /* ───────────────────────── 7. SECTION 5 — THE THREE GIFTS ───────────────────────── */
 
   gifts: {
     eyebrow: 'Chapter Four',
@@ -166,7 +188,7 @@ export const siteConfig = {
         accent: 'blush',
         paragraphs: [
           'What I appreciate most about you is that you pay attention — to the tone of a voice, to the thing someone mentioned once and clearly wanted but would never ask for twice.',
-          'Most people move through the world half-asleep. You don’t. Being around you feels like being seen, and being seen is one of the rarest things one person can give another.',
+          'Most people move through the world half-asleep. You don’t. Being around you feels like being seen, and being seen is one of the rarest things one person can hand another.',
           'You give that without announcing it. That is the part worth saying out loud.',
         ],
       },
@@ -179,7 +201,7 @@ export const siteConfig = {
         paragraphs: [
           'Here is the secret: you don’t have to earn a good day.',
           'You’ve spent so long proving yourself to a jury that was never real — working for rest instead of taking it, auditioning for people who only ever wanted you to be yourself. Worth isn’t a bill you settle.',
-          'So today, just for today, believe it. Not because I said so, but because today is yours and you are allowed to enjoy what you are without justifying it first.',
+          'So today, just for today, believe it. Not because I said so — because today is yours, and you are allowed to enjoy what you are without justifying it first.',
         ],
       },
       {
@@ -198,7 +220,7 @@ export const siteConfig = {
     ],
   },
 
-  /* ───────────────────────── 7. SECTION 6 — THE CAKE ───────────────────────── */
+  /* ───────────────────────── 8. SECTION 6 — THE CAKE ───────────────────────── */
 
   cake: {
     eyebrow: 'Chapter Five',
@@ -215,46 +237,43 @@ export const siteConfig = {
     relightLabel: 'Light them again',
   },
 
-  /* ───────────────────────── 8. SECTION 7 — THE GOODBYE ───────────────────────── */
+  /* ───────────────────────── 9. SECTION 7 — THE GOODBYE ───────────────────────── */
 
   goodbye: {
     line1: 'Made with love, especially for you.',
     line2: 'Some moments deserve to last forever.',
     replayLabel: 'Relive it from the beginning',
-    /** Shown under the replay button; "" hides the whole line. */
-    footnote: '',
+    /** Under the replay button. */
+    footnote: 'Come back any time you need reminding. It stays right here — and so do I.',
   },
 
-  /* ───────────────────────── 9. MUSIC ───────────────────────── */
+  /* ───────────────────────── 10. MUSIC ───────────────────────── */
 
   music: {
     /**
-     * Your own song: put one audio file in `public/audio/` and write its name
-     * here, e.g. 'audio/our-song.mp3'  (no leading slash needed).
-     * Leave it as '' and the site plays a soft, original ambient piano loop
-     * generated in the browser instead — free to use, no copyright worries.
+     * '' = the site plays a soft original ambient loop generated in the
+     * browser (nothing to download, no copyright to clear). If you ever want a
+     * specific song, drop one file in public/audio/ and write its name here,
+     * e.g. 'audio/our-song.mp3'.
      */
     src: '',
-    /** Label shown in the player while your own file is playing. */
+    /** Label shown in the player if you add your own file. */
     title: 'For you, on repeat',
-    /** The generated loop's title (shown only in generated mode). */
+    /** The generated loop's title (shown in generated mode). */
     generatedTitle: 'Golden Hour — ambient (generated)',
     /**
-     * Start the music at the moment the visitor clicks "Open Your Surprise".
-     * That click is a real interaction, so nothing autoplays. If it feels too
-     * forward, set this to false and let her start it from the player.
+     * Start the music at the moment she clicks "Open Your Surprise". That click
+     * is a real interaction, so nothing autoplays. If she pauses it, it never
+     * starts again on its own.
      */
     startOnOpen: true,
     /** 0–1 loudness the music begins at. */
     defaultVolume: 0.55,
-    /**
-     * Remember her volume (and whether she muted it) between visits, so the
-     * site never surprises her with sound twice.
-     */
+    /** Remember her volume (and mute) between visits. */
     remember: true,
   },
 
-  /* ───────────────────────── 10. TUNING (safe to ignore) ───────────────────────── */
+  /* ───────────────────────── 11. TUNING (safe to ignore) ───────────────────────── */
 
   effects: {
     /** Floating rose petals across the whole site. */
