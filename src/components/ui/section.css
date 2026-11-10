@@ -1,0 +1,107 @@
+.section {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--section-y);
+  padding-inline: var(--gutter);
+  isolation: isolate;
+}
+
+.section__inner {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+}
+
+.section__header {
+  display: grid;
+  gap: clamp(0.7rem, 0.4rem + 1vw, 1.1rem);
+  margin-bottom: clamp(2.25rem, 1.2rem + 4vw, 4.25rem);
+}
+
+.section--center .section__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.section--center .section__subtitle {
+  margin-inline: auto;
+}
+
+.section__title {
+  font-size: var(--fs-title);
+  max-width: 22ch;
+}
+
+.section__subtitle {
+  max-width: 58ch;
+}
+
+.section__rule {
+  position: relative;
+  width: clamp(90px, 18vw, 170px);
+  height: 1px;
+  margin-top: clamp(0.5rem, 0.2rem + 1vw, 1rem);
+  background: linear-gradient(90deg, transparent, var(--gold-line), transparent);
+}
+
+.section__rule-dot {
+  position: absolute;
+  inset-block-start: -2.5px;
+  inset-inline-start: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--gold);
+  opacity: 0.85;
+}
+
+/* ── the night tone (default) ─────────────────────────────────────── */
+.section--night {
+  color: var(--cream);
+}
+
+/* ── the paper tone: one lit page in the middle of the night ──────── */
+.section--paper {
+  color: var(--ink);
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(235, 198, 211, 0.5), transparent 60%),
+    linear-gradient(180deg, var(--cream) 0%, #fdf7f3 55%, var(--cream) 100%);
+  box-shadow: 0 -1px 0 rgba(66, 27, 45, 0.08), 0 1px 0 rgba(66, 27, 45, 0.08);
+}
+
+.section--paper .u-eyebrow {
+  color: #8d5f3f;
+}
+
+.section--paper .section__subtitle {
+  color: var(--ink-soft);
+}
+
+.section--paper .section__rule {
+  background: linear-gradient(90deg, transparent, rgba(66, 27, 45, 0.22), transparent);
+}
+
+.section--paper .section__rule-dot {
+  background: var(--burgundy);
+}
+
+/* Full-height sections for the two cinematic bookends. */
+.section--stage {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  padding-block: clamp(5.5rem, 8vh + 3rem, 9rem)
+    calc(clamp(5.5rem, 8vh + 3rem, 9rem) + var(--safe-bottom));
+}
+
+/* Never let a long letter touch the fixed player at the bottom of a phone. */
+.section {
+  scroll-margin-block-start: 4.5rem;
+}
+
+/* Content always sits above the fixed sky layer, never inside it. */
+.section__body {
+  position: relative;
+  z-index: 1;
+}

@@ -1,0 +1,60 @@
+/* ══════════════════════════════════════════════════════════════════
+   Design tokens — the visual identity of the whole experience.
+   Change a colour here and it changes everywhere.
+   ══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── palette ─────────────────────────────────────────────── */
+  --burgundy: #421b2d;
+  --plum: #21121f;
+  --blush: #ebc6d3;
+  --gold: #d8b77a;
+  --cream: #f8f0eb;
+  --white: #fffdfc;
+
+  /* derived, so the palette stays coherent */
+  --plum-deep: #170c15;
+  --blush-dim: rgba(235, 198, 211, 0.72);
+  --gold-line: rgba(216, 183, 122, 0.28);
+  --ink: #33202e; /* text on cream paper */
+  --ink-soft: rgba(51, 32, 46, 0.72);
+
+  /* ── typography ──────────────────────────────────────────── */
+  --font-display: 'Playfair Display', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --font-body: 'Poppins', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-hand: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
+
+  /* fluid type scale — 360px phone → 1600px desktop */
+  --fs-hero: clamp(2.6rem, 1.2rem + 7.2vw, 7rem);
+  --fs-display: clamp(1.9rem, 1.05rem + 3.4vw, 3.5rem);
+  --fs-title: clamp(1.6rem, 1rem + 2.4vw, 2.75rem);
+  --fs-subtitle: clamp(1.05rem, 0.98rem + 0.5vw, 1.4rem);
+  --fs-body: clamp(1rem, 0.95rem + 0.28vw, 1.14rem);
+  --fs-small: clamp(0.84rem, 0.82rem + 0.14vw, 0.94rem);
+  --fs-eyebrow: clamp(0.68rem, 0.65rem + 0.16vw, 0.8rem);
+  --fs-hand: clamp(1.5rem, 1.2rem + 1.5vw, 2.4rem);
+
+  /* ── rhythm ──────────────────────────────────────────────── */
+  --gutter: clamp(1.15rem, 0.6rem + 3.2vw, 4.5rem);
+  --section-y: clamp(4.5rem, 2.5rem + 9vw, 10rem);
+  --maxw: 1180px;
+  --maxw-read: 68ch;
+
+  /* ── surfaces ────────────────────────────────────────────── */
+  --radius-m: 18px;
+  --radius-l: 28px;
+  --shadow-soft: 0 18px 45px -22px rgba(9, 4, 8, 0.75);
+  --shadow-lift: 0 38px 80px -30px rgba(9, 4, 8, 0.85);
+  --shadow-paper: 0 26px 60px -28px rgba(23, 12, 21, 0.45);
+  --glass-line: rgba(235, 198, 211, 0.16);
+
+  /* ── motion ──────────────────────────────────────────────── */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.28s;
+  --dur-mid: 0.6s;
+
+  /* safe areas for notched phones */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}

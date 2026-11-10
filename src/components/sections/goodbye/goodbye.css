@@ -1,0 +1,98 @@
+/* ══════════════════════════════════════════════════════════════════
+   SECTION 7 — the closing screen.
+   ══════════════════════════════════════════════════════════════════ */
+
+.goodbye {
+  position: relative;
+  text-align: center;
+  background:
+    radial-gradient(90% 60% at 50% 108%, rgba(66, 27, 45, 0.85), transparent 62%),
+    radial-gradient(70% 45% at 50% -10%, rgba(216, 183, 122, 0.1), transparent 60%);
+}
+
+.goodbye__inner {
+  display: grid;
+  justify-items: center;
+  gap: clamp(1rem, 2.6vw, 1.8rem);
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.goodbye__constellation {
+  width: clamp(160px, 34vw, 250px);
+  height: auto;
+  margin-block-end: clamp(0.4rem, 1.5vw, 1rem);
+  filter: drop-shadow(0 0 14px rgba(216, 183, 122, 0.28));
+}
+
+.goodbye__lines {
+  stroke-dasharray: 460;
+  stroke-dashoffset: 460;
+  animation: goodbye-draw 3.4s var(--ease-cinematic) 0.25s forwards;
+}
+
+@keyframes goodbye-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.goodbye__line1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 1.05rem + 3vw, 3.15rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--cream);
+  max-width: 24ch;
+}
+
+.goodbye__line2 {
+  font-size: clamp(1.4rem, 1.05rem + 1.9vw, 2.4rem);
+  color: var(--blush);
+  opacity: 0.92;
+  max-width: 26ch;
+}
+
+.goodbye__actions {
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+  margin-block-start: clamp(0.6rem, 2vw, 1.4rem);
+}
+
+.goodbye__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blush);
+  opacity: 0.85;
+}
+
+.goodbye__count-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 12px 2px rgba(216, 183, 122, 0.6);
+  animation: halo-breathe 3s ease-in-out infinite;
+}
+
+.goodbye__footnote {
+  font-size: var(--fs-small);
+  color: var(--blush-dim);
+  opacity: 0.66;
+  max-width: 40ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goodbye__lines {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .goodbye__count-dot {
+    animation: none;
+  }
+}

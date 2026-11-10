@@ -1,0 +1,467 @@
+/* ══════════════════════════════════════════════════════════════════
+   SECTION 5 — three wrapped gifts.
+   ══════════════════════════════════════════════════════════════════ */
+
+.gifts-section {
+  position: relative;
+}
+
+.gifts-section::before {
+  content: '';
+  position: absolute;
+  inset-block-start: clamp(1.5rem, 4vw, 3rem);
+  inset-inline: var(--gutter);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-line) 22%, var(--gold-line) 78%, transparent);
+  opacity: 0.75;
+}
+
+.gift-grid {
+  display: grid;
+  gap: clamp(1rem, 0.6rem + 1.8vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 258px), 1fr));
+  align-items: stretch;
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+.gift-item {
+  list-style: none;
+  display: flex;
+}
+
+.gift-float {
+  width: 100%;
+  animation: gift-float 7.5s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -2.4s);
+}
+
+@keyframes gift-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.gift {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.9rem, 2vw, 1.35rem);
+  width: 100%;
+  height: 100%;
+  padding: clamp(1.4rem, 3vw, 2rem) clamp(0.9rem, 2vw, 1.4rem) clamp(1.2rem, 2.4vw, 1.6rem);
+  border-radius: var(--radius-l);
+  border: 1px solid var(--glass-line);
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(235, 198, 211, 0.09), transparent 62%),
+    linear-gradient(180deg, rgba(66, 27, 45, 0.55), rgba(28, 15, 26, 0.72));
+  box-shadow: var(--shadow-soft);
+  isolation: isolate;
+  transition:
+    border-color 0.5s var(--ease-soft),
+    box-shadow 0.5s var(--ease-cinematic),
+    background 0.5s var(--ease-soft);
+}
+
+.gift:hover,
+.gift:focus-visible {
+  border-color: rgba(216, 183, 122, 0.45);
+  box-shadow:
+    var(--shadow-lift),
+    0 0 0 1px rgba(216, 183, 122, 0.18);
+}
+
+.gift__halo {
+  position: absolute;
+  inset: -18% -10% 20%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(216, 183, 122, 0.28), transparent 72%);
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-soft);
+  pointer-events: none;
+}
+
+.gift:hover .gift__halo,
+.gift:focus-visible .gift__halo,
+.gift.is-open .gift__halo {
+  opacity: 1;
+}
+
+/* ── the box itself ───────────────────────────────────────────────── */
+.gift__prop {
+  position: relative;
+  display: block;
+  width: min(176px, 46vw);
+  aspect-ratio: 1.06;
+}
+
+.gift__box {
+  position: absolute;
+  inset: 21% 2% 0;
+  border-radius: 9px;
+  background: linear-gradient(158deg, #7a3550 0%, var(--burgundy) 46%, #2a1120 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(235, 198, 211, 0.2),
+    inset 0 -22px 32px -22px rgba(0, 0, 0, 0.85),
+    0 26px 40px -26px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+
+.gift__ribbon {
+  position: absolute;
+  background: linear-gradient(90deg, rgba(184, 146, 92, 0.95), #f0d5a5 46%, rgba(170, 133, 80, 0.95));
+  box-shadow: 0 0 14px rgba(216, 183, 122, 0.35);
+}
+
+.gift__ribbon--v {
+  inset-block: 0;
+  inset-inline-start: 50%;
+  inline-size: 15%;
+  translate: -50% 0;
+}
+
+.gift__ribbon--h {
+  inset-inline: 0;
+  inset-block-start: 52%;
+  block-size: 13%;
+  translate: 0 -50%;
+  background: linear-gradient(180deg, rgba(184, 146, 92, 0.95), #eed3a4 46%, rgba(170, 133, 80, 0.95));
+}
+
+.gift__lid {
+  position: absolute;
+  inset-inline: -3%;
+  inset-block-start: 6%;
+  block-size: 21%;
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(170deg, #8c3f5e 0%, #55223b 58%, #3a1729 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 252, 0.22),
+    0 10px 20px -12px rgba(0, 0, 0, 0.9);
+  will-change: transform, opacity;
+  z-index: 2;
+}
+
+.gift__lid .gift__ribbon--v {
+  inset-block: -6%;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.gift__bow {
+  position: absolute;
+  inset-block-start: -17px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  width: 54px;
+  height: 26px;
+}
+
+.gift__bow i {
+  position: absolute;
+  inset-block: 0;
+  width: 25px;
+  height: 22px;
+  border-radius: 60% 60% 45% 45%;
+  background: linear-gradient(160deg, #f6dfb4, var(--gold) 55%, #b98f52);
+  box-shadow: inset 0 -3px 6px rgba(120, 84, 36, 0.4);
+}
+
+.gift__bow i:first-child {
+  inset-inline-start: 0;
+  transform: rotate(-24deg) skewX(-6deg);
+}
+
+.gift__bow i:last-child {
+  inset-inline-end: 0;
+  transform: rotate(24deg) skewX(6deg);
+}
+
+.gift__bow b {
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fbeccb, var(--gold) 60%, #a97f42);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* light escaping from an opened box */
+.gift__spill {
+  position: absolute;
+  inset-inline: 6%;
+  inset-block-start: 0;
+  block-size: 46%;
+  background: radial-gradient(58% 100% at 50% 0%, rgba(255, 244, 216, 0.85), rgba(216, 183, 122, 0.25) 52%, transparent 78%);
+  filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-soft);
+}
+
+.gift.is-open .gift__spill {
+  opacity: 1;
+  animation: gift-spill 3.4s ease-in-out infinite;
+}
+
+@keyframes gift-spill {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scaleY(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.1);
+  }
+}
+
+/* ── the words under the box ──────────────────────────────────────── */
+.gift__face {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.gift__kicker {
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.85;
+}
+
+.gift__label {
+  font-family: var(--font-display);
+  font-size: clamp(1.06rem, 0.98rem + 0.5vw, 1.32rem);
+  font-weight: 600;
+  line-height: 1.32;
+  color: var(--cream);
+  max-width: 20ch;
+}
+
+.gift__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-block-start: 0.35rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blush);
+  opacity: 0.75;
+  transition: opacity var(--dur-fast) var(--ease-soft);
+}
+
+.gift:hover .gift__action {
+  opacity: 1;
+}
+
+.gift__action-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(235, 198, 211, 0.16);
+}
+
+/* accents per gift */
+.gift--gold .gift__box {
+  background: linear-gradient(158deg, #8a6a3c 0%, #5c4324 48%, #2e2114 100%);
+}
+.gift--gold .gift__lid {
+  background: linear-gradient(170deg, #c7a268 0%, #8a6a3c 58%, #513a1e 100%);
+}
+.gift--rose .gift__box {
+  background: linear-gradient(158deg, #a2496c 0%, #63243f 48%, #2f1220 100%);
+}
+.gift--rose .gift__lid {
+  background: linear-gradient(170deg, #c16588 0%, #7b3350 58%, #4a1c30 100%);
+}
+
+.gifts__status {
+  display: block;
+  margin-block-start: clamp(1.4rem, 3.5vw, 2.4rem);
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--blush);
+  opacity: 0.86;
+}
+
+/* ── reveal 1: lines ─────────────────────────────────────────────── */
+.gift-lines {
+  display: grid;
+  gap: clamp(1rem, 2.4vw, 1.5rem);
+  max-width: 60ch;
+}
+
+.gift-lines__eyebrow,
+.gift-wishes__eyebrow,
+.gift-note__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #8d5f3f;
+}
+
+.gift-lines__flow {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.35rem);
+}
+
+.gift-lines__text {
+  position: relative;
+  font-size: clamp(1.02rem, 0.97rem + 0.3vw, 1.16rem);
+  line-height: 1.9;
+  color: var(--ink);
+  padding-block-end: 0.85rem;
+}
+
+.gift-lines__rule {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: 62px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(216, 183, 122, 0.9), rgba(216, 183, 122, 0));
+  transform-origin: 0 50%;
+}
+
+/* ── reveal 2: the folded note ───────────────────────────────────── */
+.gift-note {
+  display: grid;
+  place-items: center;
+  padding-block: 0.5rem;
+  perspective: 900px;
+}
+
+.gift-note__fold {
+  position: relative;
+  display: grid;
+  gap: clamp(0.8rem, 1.8vw, 1.15rem);
+  width: min(100%, 56ch);
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--white), #fbf2ea);
+  box-shadow: var(--shadow-paper), 0 0 0 1px rgba(66, 27, 45, 0.07);
+  transform-origin: top center;
+  text-align: center;
+}
+
+.gift-note__crease {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 33%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(66, 27, 45, 0.16), transparent);
+  pointer-events: none;
+}
+
+.gift-note__crease--second {
+  inset-block-start: 66%;
+}
+
+.gift-note__line {
+  font-size: clamp(1.04rem, 0.98rem + 0.4vw, 1.22rem);
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.gift-note__line:first-of-type {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.05rem + 1vw, 1.75rem);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--burgundy);
+}
+
+/* ── reveal 3: wishes, with sparks ───────────────────────────────── */
+.gift-wishes {
+  position: relative;
+  display: grid;
+  gap: clamp(1rem, 2.2vw, 1.5rem);
+  padding-block: 0.4rem;
+}
+
+.gift-wishes__sparks {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gift-wishes__sparks i {
+  position: absolute;
+  inset-block-end: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 10px 2px rgba(216, 183, 122, 0.7);
+}
+
+.gift-wishes__list {
+  display: grid;
+  gap: clamp(0.6rem, 1.6vw, 1rem);
+  max-width: 54ch;
+}
+
+.gift-wishes__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.8rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.06rem, 0.98rem + 0.55vw, 1.32rem);
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.gift-wishes__bullet {
+  position: relative;
+  top: -0.15em;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 34% 30%, #fbeccb, var(--gold) 62%, #b98f52);
+  box-shadow: 0 0 12px rgba(216, 183, 122, 0.6);
+}
+
+@media (max-width: 560px) {
+  .gift-grid {
+    grid-template-columns: 1fr;
+  }
+  .gift {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-items: start;
+    text-align: start;
+    gap: 1rem;
+  }
+  .gift__prop {
+    width: 108px;
+  }
+  .gift__face {
+    justify-items: start;
+    text-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gift-float,
+  .gift.is-open .gift__spill {
+    animation: none;
+  }
+}
