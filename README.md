@@ -46,7 +46,7 @@ signature: {
   eyebrow: 'From',
   name: 'Bongani Tshuma',
   line: 'I love you',
-  whisper: 'Today, tomorrow, and every ordinary Tuesday in between.',
+  whisper: 'Today, tomorrow, and every ordinary day in between.',
 },
 ```
 

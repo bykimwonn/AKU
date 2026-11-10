@@ -64,7 +64,7 @@ export const siteConfig = {
     /** The words under the name, set in capitals with rules around them. */
     line: 'I love you',
     /** Optional last whisper beneath the signature. "" hides it. */
-    whisper: 'Today, tomorrow, and every ordinary Tuesday in between.',
+    whisper: 'Today, tomorrow, and every ordinary day in between.',
   },
 
   /* ───────────────────────── 3. SECTION 1 — THE OPENING ───────────────────────── */

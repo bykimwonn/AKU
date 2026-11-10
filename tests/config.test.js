@@ -88,6 +88,22 @@ describe('the personalisation config', () => {
     }
   });
 
+  it('never leans on a weekday to make a point', () => {
+    // "every ordinary Tuesday" reads as a random day unless you already know the
+    // idiom — the copy says what it means instead, in plain words.
+    const visible = JSON.stringify({
+      signature: siteConfig.signature,
+      envelope: siteConfig.envelope,
+      letter: siteConfig.letter,
+      gifts: siteConfig.gifts,
+      cake: siteConfig.cake,
+      goodbye: siteConfig.goodbye,
+      welcome: siteConfig.welcome,
+      gallery: siteConfig.gallery,
+    });
+    expect(visible).not.toMatch(/\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i);
+  });
+
   it('lists a chapter for every section the app renders', () => {
     expect(SECTIONS.map((section) => section.id)).toEqual([
       'envelope',
