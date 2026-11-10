@@ -12,6 +12,7 @@ vi.mock('canvas-confetti', () => {
 import { MotionConfig } from 'framer-motion';
 import App from '../src/App.jsx';
 import siteConfig from '../src/config/site.config.js';
+import { interpolate } from '../src/utils/text.js';
 
 const LETTER_OPENING = /I tried to write you an ordinary birthday message/;
 
@@ -89,6 +90,59 @@ describe('the envelope', () => {
     // …and it can be read again, so nobody is left with a one-shot surprise.
     await user.click(screen.getByRole('button', { name: /read the letter again/i }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
+  });
+});
+
+describe('the envelope hand-off', () => {
+  it('"Keep going" closes the letter and glides to the next chapter', async () => {
+    const user = userEvent.setup();
+    renderExperience();
+    await openExperience(user);
+
+    // Record every scroll the app asks for, and which section asked for it.
+    // (setup.js installs scrollIntoView with defineProperty, so it has to be
+    // replaced the same way.)
+    const scrolls = [];
+    const original = Element.prototype.scrollIntoView;
+    const install = (fn) =>
+      Object.defineProperty(Element.prototype, 'scrollIntoView', {
+        configurable: true,
+        writable: true,
+        value: fn,
+      });
+    install(function patched(options) {
+      scrolls.push({ id: this?.id, options });
+    });
+
+    try {
+      // the opening screen hands the page to chapter one a beat later — that
+      // is not the scroll under test, so start counting from after it
+
+      await waitFor(() => expect(document.body).not.toHaveClass('is-locked'));
+      // The opening screen hands over to chapter one on a 60ms timer; let that
+      // land before starting to count, or it looks like part of the hand-off.
+      await new Promise((resolve) => setTimeout(resolve, 120));
+      scrolls.length = 0;
+
+      await user.click(screen.getByRole('button', { name: /open the envelope/i }));
+      const dialog = await screen.findByRole('dialog');
+      const keepGoing = within(dialog).getByRole('button', { name: /keep going/i });
+      expect(keepGoing).toHaveTextContent('six frames next');
+
+      await user.click(keepGoing);
+
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      await waitFor(() => expect(document.body).not.toHaveClass('is-locked'));
+
+      // The jump lands on the gallery, smoothly, exactly once.
+      const toGallery = scrolls.filter((entry) => entry.id === 'gallery');
+      expect(toGallery).toHaveLength(1);
+      expect(toGallery[0].options).toMatchObject({ block: 'start', behavior: 'smooth' });
+      // and nowhere else was scrolled to, so she is not left at the envelope
+      expect(scrolls.map((entry) => entry.id)).toEqual(['gallery']);
+    } finally {
+      install(original);
+    }
   });
 });
 
@@ -192,6 +246,23 @@ describe('the three gifts', () => {
   });
 });
 
+describe('the nickname', () => {
+  it('appears where a whole name would be too much', async () => {
+    const user = userEvent.setup();
+    renderExperience();
+    await openExperience(user);
+
+    const short = siteConfig.recipient.short;
+    // the top-bar label, the second letter, the cake and the last line
+    expect(screen.getByText(`${short}'s Little Universe`)).toBeInTheDocument();
+    expect(screen.getByText(`My dearest ${short},`)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`Make a wish, ${short},`, 'i'))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`especially for you, ${short}\\.`))).toBeInTheDocument();
+    // the sealed letter is the formal one — it keeps her full name
+    expect(screen.getByText(/My dearest Akudzweishe,/)).toBeInTheDocument();
+  });
+});
+
 describe('the cake', () => {
   const candleCount = siteConfig.cake.candleCount;
 
@@ -255,8 +326,8 @@ describe('the goodbye', () => {
     renderExperience();
     await openExperience(user);
 
-    expect(screen.getByText(siteConfig.goodbye.line1)).toBeInTheDocument();
-    expect(screen.getByText(siteConfig.goodbye.line2)).toBeInTheDocument();
+    expect(screen.getByText(interpolate(siteConfig.goodbye.line1))).toBeInTheDocument();
+    expect(screen.getByText(interpolate(siteConfig.goodbye.line2))).toBeInTheDocument();
   });
 
   it('signs the very end, in full, with the line that matters', async () => {

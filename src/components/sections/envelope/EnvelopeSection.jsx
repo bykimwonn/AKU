@@ -152,11 +152,13 @@ export function EnvelopeSection({ onJump }) {
               type="button"
               className="btn-ghost"
               onClick={() => {
+                // Close first: the jump is handed to the lock so it lands on
+                // the gallery instead of being undone by the unlock.
                 setLetterOpen(false);
                 onJump?.('gallery');
               }}
             >
-              Keep going
+              {interpolate(envelope.continueLabel || 'Keep going')}
               <ArrowRight size={15} strokeWidth={1.8} aria-hidden="true" />
             </button>
           </>

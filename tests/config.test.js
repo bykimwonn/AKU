@@ -16,6 +16,8 @@ describe('the personalisation config', () => {
     const required = {
       'recipient.name': siteConfig.recipient.name,
       'recipient.salutation': siteConfig.recipient.salutation,
+      'recipient.short': siteConfig.recipient.short,
+      'envelope.continueLabel': siteConfig.envelope.continueLabel,
       'welcome.kicker': siteConfig.welcome.kicker,
       'welcome.tagline': siteConfig.welcome.tagline,
       'welcome.cta': siteConfig.welcome.cta,
@@ -115,6 +117,20 @@ describe('the personalisation config', () => {
   });
 });
 
+describe('the birthday is tomorrow, not today', () => {
+  it('counts down from the configured date', () => {
+    expect(siteConfig.birthdayDate).toBe('2026-11-11');
+    // the night before: one day to go, singular
+    const eve = describeBirthday(siteConfig.birthdayDate, new Date(2026, 10, 10));
+    expect(eve).toMatchObject({ kind: 'upcoming', days: 1 });
+    expect(eve.label).toBe('1 day until her day.');
+    // on the day itself the site stops counting
+    const day = describeBirthday(siteConfig.birthdayDate, new Date(2026, 10, 11));
+    expect(day.kind).toBe('today');
+    expect(day.isToday).toBe(true);
+  });
+});
+
 describe('name tokens', () => {
   it('replaces {name} and {NAME} in any string', () => {
     expect(interpolate('Happy birthday, {name}.')).toBe(
@@ -125,6 +141,23 @@ describe('name tokens', () => {
 
   it('leaves text without tokens alone', () => {
     expect(interpolate('Nothing to swap here.')).toBe('Nothing to swap here.');
+  });
+
+  it('knows the everyday nickname as well as the display name', () => {
+    const short = siteConfig.recipient.short;
+    expect(interpolate('My dearest {short},')).toBe(`My dearest ${short},`);
+    expect(interpolate('{SHORT}')).toBe(short.toUpperCase());
+    // the nickname is used where a whole name would be too much
+    expect(interpolate(siteConfig.brand.wordmark)).toBe(`${short}'s Little Universe`);
+    expect(siteConfig.letter.greeting).toContain('{short}');
+    expect(siteConfig.cake.subtitle).toContain('{short}');
+    expect(siteConfig.goodbye.line1).toContain('{short}');
+    // and the sealed letter keeps her full name
+    expect(siteConfig.envelope.greeting).toContain('{name}');
+  });
+
+  it('leaves an unknown token visible instead of swallowing it', () => {
+    expect(interpolate('Hello {shrot}')).toBe('Hello {shrot}');
   });
 
 });

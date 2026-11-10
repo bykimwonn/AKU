@@ -1,3 +1,4 @@
+import { interpolate } from '../../utils/text.js';
 import { Reveal, RevealWords } from './Reveal.jsx';
 import './section.css';
 
@@ -21,7 +22,11 @@ export function SectionShell({
   ...rest
 }) {
   const Tag = as;
-  const hasHeader = Boolean(eyebrow || title || subtitle);
+  // Headers may carry {name} / {short} tokens, so they are resolved here once.
+  const heading = interpolate(title);
+  const lead = interpolate(subtitle);
+  const kicker = interpolate(eyebrow);
+  const hasHeader = Boolean(kicker || heading || lead);
 
   return (
     <Tag
@@ -35,21 +40,21 @@ export function SectionShell({
       <div className="section__inner">
         {hasHeader ? (
           <header className="section__header">
-            {eyebrow ? (
+            {kicker ? (
               <Reveal as="p" className="u-eyebrow" y={12} blur={3}>
-                {eyebrow}
+                {kicker}
               </Reveal>
             ) : null}
 
-            {title ? (
+            {heading ? (
               <h2 id={`${id}-title`} className={`section__title ${titleClassName}`.trim()}>
-                <RevealWords text={title} />
+                <RevealWords text={heading} />
               </h2>
             ) : null}
 
-            {subtitle ? (
+            {lead ? (
               <Reveal as="p" className="section__subtitle u-lead" y={16} blur={4} delay={0.12}>
-                {subtitle}
+                {lead}
               </Reveal>
             ) : null}
 

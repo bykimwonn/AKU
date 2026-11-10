@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { prefersReducedMotion } from '../utils/text.js';
+import { scrollHandoff } from '../utils/scrollHandoff.js';
 
 /**
  * Watches the sections so the navigation always knows where the visitor is,
@@ -55,6 +56,14 @@ export function useActiveSection(ids = []) {
   const goTo = useCallback((id) => {
     const node = document.getElementById(id);
     if (!node) return;
+
+    // Asked from inside an overlay? Hand it to the lock instead: scrolling now
+    // would be undone the moment the overlay lets go of the page.
+    if (scrollHandoff.isLocked()) {
+      scrollHandoff.request(id);
+      return;
+    }
+
     node.scrollIntoView({
       behavior: prefersReducedMotion() ? 'auto' : 'smooth',
       block: 'start',

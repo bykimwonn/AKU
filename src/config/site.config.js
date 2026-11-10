@@ -21,7 +21,7 @@ export const siteConfig = {
     /** Browser tab title and the link preview title. */
     title: '{NAME} — A Little Universe Of Love',
     /** Small label in the top corner of the site. */
-    wordmark: 'A Little Universe Of Love',
+    wordmark: "{short}'s Little Universe",
     /** Under the wordmark on the opening screen. */
     edition: 'A birthday experience',
   },
@@ -29,6 +29,12 @@ export const siteConfig = {
   recipient: {
     /** Uppercase display name on the opening screen. */
     name: 'AKUDZWEISHE',
+    /**
+     * The name you actually call her. Used where the full name would be too
+     * much: the top-bar label, the second letter, the cake, the last line.
+     * Spell it however you like.
+     */
+    short: 'Aku',
     /** How she is addressed in the handwritten places. */
     handwritten: 'Akudzweishe',
     /** Used inside sentences, e.g. "Dear {salutation}". */
@@ -41,11 +47,11 @@ export const siteConfig = {
   },
 
   /**
-   * 'auto' = today is treated as her day, so the site always reads correctly.
-   * Set '2026-11-20' (YYYY-MM-DD) for a real countdown before the day and a
-   * count-up afterwards.
+   * Her birthday, 'YYYY-MM-DD' — only the month and day are read. The goodbye
+   * screen counts down to it, and on the day itself says so instead.
+   * 'auto' would treat every day as the day.
    */
-  birthdayDate: 'auto',
+  birthdayDate: '2026-11-11',
 
   /* ───────────────────────── 2. THE SIGNATURE ─────────────────────────
      Appears at the end of both letters and once, large, at the very end.  */
@@ -90,6 +96,8 @@ export const siteConfig = {
       'Read it slowly. Stay on the lines that land. There are three gifts further down, and a cake that only gives up its wish to someone brave enough to blow it out.',
     ],
     signOff: 'All my love, always',
+    /** The button at the foot of the letter: it closes the letter and moves on. */
+    continueLabel: 'Keep going — six frames next',
   },
 
   /* ───────────────────────── 5. SECTION 3 — THE FRAMES ─────────────────────────
@@ -155,7 +163,7 @@ export const siteConfig = {
     subtitle: 'Written slowly, on purpose.',
 
     /** The line above the letter. '' hides it. */
-    greeting: 'My dearest {name},',
+    greeting: 'My dearest {short},',
 
     paragraphs: [
       'I don’t say it often enough, so let me say it plainly: I’m glad you exist. Of all the ways a person can move through this world, you chose to move through it gently — and that has not gone unnoticed, even on the days it felt like it had.',
@@ -225,7 +233,7 @@ export const siteConfig = {
   cake: {
     eyebrow: 'Chapter Five',
     title: 'One last thing before you go',
-    subtitle: 'Make a wish, then blow out the candles — or tap them one by one.',
+    subtitle: 'Make a wish, {short}, then blow out the candles — or tap them one by one.',
     /** How many candles on the cake. 1–9 works best on small screens. */
     candleCount: 5,
     /** Shown on the cake before the candles are out. */
@@ -240,7 +248,7 @@ export const siteConfig = {
   /* ───────────────────────── 9. SECTION 7 — THE GOODBYE ───────────────────────── */
 
   goodbye: {
-    line1: 'Made with love, especially for you.',
+    line1: 'Made with love, especially for you, {short}.',
     line2: 'Some moments deserve to last forever.',
     replayLabel: 'Relive it from the beginning',
     /** Under the replay button. */

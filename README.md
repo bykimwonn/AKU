@@ -39,9 +39,9 @@ line, floating rose petals, and a rail of chapter dots on desktop.
 field `""` hides it quietly rather than breaking the page.
 
 ```js
-recipient: { name: 'AKUDZWEISHE', salutation: 'Akudzweishe' },
-sender:    { name: 'Bongani Tshuma' },
-birthdayDate: 'auto',        // or '2026-11-20' for a real countdown / count-up
+recipient: { name: 'AKUDZWEISHE', salutation: 'Akudzweishe', short: 'Aku' },
+sender:       { name: 'Bongani Tshuma' },
+birthdayDate: '2026-11-11',   // the goodbye screen counts down to it
 signature: {
   eyebrow: 'From',
   name: 'Bongani Tshuma',
@@ -50,8 +50,23 @@ signature: {
 },
 ```
 
-Tokens: `{name}` and `{NAME}` are replaced anywhere in the copy with the recipient's name —
-useful if a sentence needs her name in it.
+**Tokens** are replaced anywhere in the copy, so a name never has to be typed twice:
+
+| Token | Becomes | Where it belongs |
+| --- | --- | --- |
+| `{name}` | `Akudzweishe` | the letters, anything formal |
+| `{NAME}` | `AKUDZWEISHE` | the opening screen, the cake headline |
+| `{short}` | `Aku` | the top-bar label, the second letter, the cake, the last line |
+| `{SHORT}` | `AKU` | if you ever need it shouting |
+
+An unknown token is left as written rather than deleted, so a typo shows up instead of eating a
+sentence. `{short}` falls back to the full name if you clear it.
+
+Section headers resolve tokens too (in `SectionShell`), so you can put her name in a title without
+touching a component.
+
+**The countdown** appears once, on the goodbye screen: `1 day until her day.` → `Today, the day
+itself.` on 11 November → `N days since her day — M to go around again.` after it.
 
 ### The six frames
 

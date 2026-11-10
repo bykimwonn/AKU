@@ -2,19 +2,29 @@ import siteConfig from '../config/site.config.js';
 
 /**
  * Tiny text helpers so the config file can stay readable.
- * `{name}` / `{NAME}` tokens are replaced with the recipient's name.
+ *
+ *   {name}      her name as written in a sentence   → "Akudzweishe"
+ *   {NAME}      the display version                 → "AKUDZWEISHE"
+ *   {short}     the everyday nickname               → "Aku"
+ *   {SHORT}     the nickname, shouting               → "AKU"
+ *
+ * A token with nothing to expand to is left alone, so a typo in the config
+ * shows up as a visible `{shrot}` rather than silently vanishing.
  */
 export function tokenMap(config = siteConfig) {
+  const short = config.recipient.short || config.recipient.salutation || config.recipient.name;
   return {
     name: config.recipient.salutation || config.recipient.name,
     NAME: config.recipient.name || config.recipient.salutation,
+    short,
+    SHORT: short ? String(short).toUpperCase() : '',
   };
 }
 
 export function interpolate(value, config = siteConfig) {
   if (typeof value !== 'string') return value;
   const map = tokenMap(config);
-  return value.replace(/\{(name|NAME)\}/g, (_, key) => map[key] ?? value);
+  return value.replace(/\{(name|NAME|short|SHORT)\}/g, (_, key) => map[key] || value);
 }
 
 /** Interpolate a string or an array of strings. */
