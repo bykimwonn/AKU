@@ -1,0 +1,312 @@
+/* ══════════════════════════════════════════════════════════════════
+   SECTION 2 — the envelope, the wax seal, and the letter inside it.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* this chapter closes a little tighter than it opens */
+.envelope-section {
+  padding-block-end: clamp(3.5rem, 2rem + 6vw, 7rem);
+}
+
+.envelope-stage {
+  display: grid;
+  justify-items: center;
+  gap: clamp(1.1rem, 3vw, 1.9rem);
+}
+
+.envelope {
+  position: relative;
+  display: block;
+  width: min(430px, 84vw);
+  aspect-ratio: 1.52;
+  perspective: 1300px;
+  border-radius: 12px;
+  background: none;
+}
+
+.envelope:focus-visible {
+  outline-offset: 8px;
+}
+
+.envelope__aura {
+  position: absolute;
+  inset: -26%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(216, 183, 122, 0.28), transparent 72%);
+  filter: blur(22px);
+  opacity: 0.75;
+  transition: opacity 0.6s var(--ease-soft);
+  pointer-events: none;
+}
+
+.envelope:hover .envelope__aura,
+.envelope.is-open .envelope__aura {
+  opacity: 1;
+}
+
+.envelope__back {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 12px;
+  background: linear-gradient(158deg, #4c2139 0%, #2d1527 58%, #201221 100%);
+  box-shadow: var(--shadow-lift);
+  border: 1px solid rgba(216, 183, 122, 0.22);
+}
+
+/* ── the page inside ──────────────────────────────────────────────── */
+.envelope__letter {
+  position: absolute;
+  inset: 7% 7% 5%;
+  z-index: 2;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: clamp(0.7rem, 3.4vw, 1.15rem) clamp(0.8rem, 3.6vw, 1.25rem);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #fffdfc, #f6ece6);
+  box-shadow: 0 -12px 26px -18px rgba(9, 4, 8, 0.75);
+  will-change: transform;
+}
+
+.envelope__letter-greeting {
+  font-size: clamp(1.1rem, 4.4vw, 1.5rem);
+  color: var(--burgundy);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.envelope__letter-lines {
+  display: grid;
+  gap: 0.42rem;
+  margin-block-start: 0.25rem;
+}
+
+.envelope__letter-lines i {
+  display: block;
+  height: 1px;
+  background: rgba(66, 27, 45, 0.22);
+}
+
+.envelope__letter-lines i:nth-child(2) {
+  width: 92%;
+}
+
+.envelope__letter-lines i:nth-child(3) {
+  width: 66%;
+}
+
+/* ── the front of the envelope, with the V the page slides through ── */
+.envelope__pocket {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 12px;
+  clip-path: polygon(0 7%, 50% 55%, 100% 7%, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #451d33 0%, #2f1529 62%, #241322 100%);
+  box-shadow: inset 0 1px 0 rgba(235, 198, 211, 0.12);
+  pointer-events: none;
+}
+
+.envelope__fold {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.envelope__fold--left {
+  clip-path: polygon(0 6%, 51% 55%, 0 100%);
+  background: linear-gradient(90deg, rgba(235, 198, 211, 0.13), rgba(235, 198, 211, 0) 62%);
+}
+
+.envelope__fold--right {
+  clip-path: polygon(100% 6%, 49% 55%, 100% 100%);
+  background: linear-gradient(270deg, rgba(235, 198, 211, 0.1), rgba(235, 198, 211, 0) 62%);
+}
+
+/* ── the flap ─────────────────────────────────────────────────────── */
+.envelope__flap {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: 4;
+  height: 55%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-start-start-radius: 12px;
+  border-start-end-radius: 12px;
+  background: linear-gradient(180deg, #59273f 0%, #40192f 70%, #35152a 100%);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  will-change: transform;
+  box-shadow: 0 14px 28px -20px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+.envelope:not(.is-open) .envelope__flap {
+  filter: drop-shadow(0 1px 0 rgba(216, 183, 122, 0.16));
+}
+
+/* ── the wax seal ─────────────────────────────────────────────────── */
+.envelope__seal {
+  position: absolute;
+  inset-block-start: 52%;
+  inset-inline-start: 50%;
+  z-index: 5;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  width: clamp(54px, 15vw, 70px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(235, 198, 211, 0.4), transparent 58%),
+    radial-gradient(circle at 50% 55%, #6d2c47, #3d1728 72%);
+  border: 1px solid rgba(216, 183, 122, 0.45);
+  box-shadow:
+    0 12px 26px -12px rgba(0, 0, 0, 0.85),
+    inset 0 1px 6px rgba(255, 253, 252, 0.18);
+  pointer-events: none;
+}
+
+.envelope__seal-mark {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  font-weight: 600;
+  color: rgba(216, 183, 122, 0.92);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.envelope:not(.is-open)::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 52%;
+  inset-inline-start: 50%;
+  width: clamp(54px, 15vw, 70px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(216, 183, 122, 0.5);
+  animation: seal-pulse 3.2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes seal-pulse {
+  0% {
+    opacity: 0.75;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.85);
+  }
+}
+
+/* ── cue under the envelope ───────────────────────────────────────── */
+.envelope__cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--blush);
+  opacity: 0.88;
+}
+
+.envelope__cue-ring {
+  position: relative;
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.envelope__cue-ring::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid rgba(216, 183, 122, 0.55);
+  animation: cue-ring 2.6s ease-out infinite;
+}
+
+@keyframes cue-ring {
+  0% {
+    opacity: 0.8;
+    scale: 1;
+  }
+  70%,
+  100% {
+    opacity: 0;
+    scale: 2.3;
+  }
+}
+
+/* ── the letter itself ────────────────────────────────────────────── */
+.letter {
+  position: relative;
+}
+
+.letter__flow {
+  display: grid;
+  gap: clamp(0.85rem, 0.6rem + 0.9vw, 1.25rem);
+  max-width: var(--maxw-read);
+}
+
+.letter__greeting {
+  font-size: clamp(2rem, 1.2rem + 3.4vw, 3.1rem);
+  color: var(--burgundy);
+  line-height: 1.15;
+}
+
+.letter__text {
+  font-size: var(--fs-body);
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.letter__text--lead {
+  font-size: calc(var(--fs-body) + 0.06rem);
+  color: rgba(51, 32, 46, 0.86);
+}
+
+.letter__rule {
+  margin-block: clamp(0.4rem, 1vw, 0.85rem);
+}
+
+.letter__signoff {
+  display: grid;
+  justify-items: end;
+  gap: 0.1rem;
+  margin-block-start: clamp(0.6rem, 2vw, 1.2rem);
+  text-align: end;
+}
+
+.letter__signoff-line {
+  font-size: var(--fs-small);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.letter__signoff-name {
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.3rem);
+  color: var(--burgundy);
+}
+
+.envelope__foot-note {
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope:not(.is-open)::after,
+  .envelope__cue-ring::after {
+    animation: none;
+  }
+}

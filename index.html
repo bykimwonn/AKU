@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>AKUDZWEISHE — A Little Universe Of Love</title>
+    <meta
+      name="description"
+      content="A little universe made just for you — a personalised birthday experience of letters, photographs, gifts and one cake that needs blowing out."
+    />
+    <meta name="theme-color" content="#21121F" />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:title" content="A Little Universe Of Love" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:description"
+      content="Some people deserve more than an ordinary birthday wish."
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <style>
+      /* First-paint background so there is never a white flash before React runs. */
+      html,
+      body {
+        margin: 0;
+        background: #21121f;
+        color: #f8f0eb;
+      }
+      #root:empty::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(120% 80% at 50% 10%, rgba(66, 27, 45, 0.9), transparent 60%),
+          #21121f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div style="padding: 3rem 1.5rem; text-align: center; font-family: Georgia, serif">
+        <h1 style="letter-spacing: 0.08em">A Little Universe Of Love</h1>
+        <p style="opacity: 0.8">
+          This birthday experience needs JavaScript to run. Please switch it on and reload the
+          page.
+        </p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

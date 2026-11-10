@@ -1,0 +1,19 @@
+.reveal-words {
+  display: inline-block;
+}
+
+.reveal-words__line {
+  display: inline;
+}
+
+.word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+/* Anything animating inside the experience should not fight the page. */
+@media (prefers-reduced-motion: reduce) {
+  .word {
+    will-change: auto;
+  }
+}
