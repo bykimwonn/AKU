@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion.js';
-import { Flame, Wind } from 'lucide-react';
+import { Flame, MoveHorizontal, Wind } from 'lucide-react';
 import siteConfig from '../../../config/site.config.js';
 import { celebrate } from '../../../utils/celebrate.js';
 import { clamp, interpolate } from '../../../utils/text.js';
+import { useCakeOrbit } from '../../../hooks/useCakeOrbit.js';
+import { LAYOUT, candleRing } from './cake3d.js';
 import { SectionShell } from '../../ui/SectionShell.jsx';
 import { Stagger, StaggerItem } from '../../ui/Stagger.jsx';
 import { EASE } from '../../ui/Reveal.jsx';
@@ -24,6 +26,8 @@ const COUNT = clamp(Number(siteConfig.cake?.candleCount ?? 5) || 5, 1, 9);
 export function CakeSection() {
   const cake = siteConfig.cake;
   const reduced = usePrefersReducedMotion();
+  const { stageRef, dragging, spin, handlers } = useCakeOrbit({ reduced });
+  const [touched, setTouched] = useState(false);
   const [lit, setLit] = useState(() => Array.from({ length: COUNT }, () => true));
   const [blowing, setBlowing] = useState(false);
   const [celebrated, setCelebrated] = useState(false);
@@ -87,6 +91,10 @@ export function CakeSection() {
     setCelebrated(false);
   };
 
+  // Candles stand on the icing, spread evenly around the ring — turning the
+  // cake reveals the far side, and none of them can be hidden from a click.
+  const ring = useMemo(() => candleRing(COUNT, { radius: LAYOUT.candles.r, y: LAYOUT.candles.base }), []);
+
   return (
     <SectionShell
       id="cake"
@@ -96,25 +104,48 @@ export function CakeSection() {
       subtitle={cake.subtitle}
       className="cake-section"
     >
-      <div className={`cake-scene ${allOut ? 'is-done' : ''} ${blowing ? 'is-blowing' : ''}`}>
-        <motion.span className="cake-scene__light" aria-hidden="true" animate={{ opacity: allOut ? 0.35 : 1 }} transition={{ duration: 1.2 }} />
+      <div
+        ref={stageRef}
+        className={`cake3d ${allOut ? 'is-done' : ''} ${blowing ? 'is-blowing' : ''} ${dragging ? 'is-grabbing' : ''}`.trim()}
+        data-spin={spin ? 'on' : 'off'}
+        tabIndex={0}
+        role="group"
+        aria-label="Birthday cake. Drag it to turn it, or use the arrow keys to reach every candle."
+        {...handlers}
+        onPointerDownCapture={() => setTouched(true)}
+        onKeyDownCapture={() => setTouched(true)}
+      >
+        <div className="cake3d__world">
+          <CakeBody litCount={lit.filter(Boolean).length} total={COUNT} reduced={reduced} />
 
-        <div className="cake-scene__candles" role="group" aria-label="Candles">
-          {lit.map((on, index) => (
-            <Candle
-              key={index}
-              index={index}
-              total={COUNT}
-              lit={on}
-              reduced={reduced}
-              onExtinguish={() => extinguish(index)}
-              onRelight={() => relight(index)}
-            />
-          ))}
+          <div
+            className="cake3d__candles"
+            role="group"
+            aria-label="Candles"
+            style={{ '--cr': LAYOUT.candles.r, '--cb': LAYOUT.candles.base }}
+          >
+            {lit.map((on, index) => (
+              <span className="candle-slot" key={index} style={{ '--a': `${ring[index].angle.toFixed(2)}deg` }}>
+                <Candle
+                  index={index}
+                  total={COUNT}
+                  lit={on}
+                  angle={ring[index].angle}
+                  onExtinguish={() => extinguish(index)}
+                  onRelight={() => relight(index)}
+                />
+              </span>
+            ))}
+          </div>
         </div>
 
-        <CakeBody litCount={lit.filter(Boolean).length} />
+        <span className="cake3d__specular" aria-hidden="true" />
       </div>
+
+      <p className={`cake3d__cue ${touched ? 'is-hidden' : ''}`.trim()} aria-hidden="true">
+        <MoveHorizontal size={14} strokeWidth={1.7} />
+        {interpolate(cake.dragHint || 'Drag the cake to turn it')}
+      </p>
 
       <div className="cake__controls">
         <p className="cake__prompt" role="status" aria-live="polite">

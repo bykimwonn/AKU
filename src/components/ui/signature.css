@@ -1,0 +1,144 @@
+/* ══════════════════════════════════════════════════════════════════
+   The signature — her words, my name, the line that matters.
+   Two tints (paper and night) and two sizes; the flourish draws itself in.
+   ══════════════════════════════════════════════════════════════════ */
+
+.signature {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  width: 100%;
+}
+
+.signature--start {
+  justify-items: start;
+  text-align: start;
+}
+
+.signature__eyebrow {
+  margin: 0;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.signature__name {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-weight: 600;
+  line-height: 1.05;
+  rotate: -1.6deg;
+  white-space: nowrap;
+}
+
+.signature__flourish {
+  width: min(220px, 62%);
+  height: auto;
+  margin-block-start: -0.15rem;
+  opacity: 0.8;
+}
+
+.signature__line {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.signature__rule {
+  display: block;
+  inline-size: clamp(14px, 6vw, 46px);
+  block-size: 1px;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+.signature__whisper {
+  margin: 0;
+  font-size: var(--fs-small);
+  font-style: italic;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+/* ── sizes ─────────────────────────────────────────────────────────── */
+.signature--sm .signature__name {
+  font-size: clamp(1.7rem, 1.35rem + 1.6vw, 2.35rem);
+}
+
+.signature--sm .signature__line {
+  margin-block-start: 0.5rem;
+  font-size: clamp(0.72rem, 0.66rem + 0.3vw, 0.86rem);
+}
+
+.signature--lg .signature__eyebrow {
+  margin-block-end: 0.5rem;
+}
+
+.signature--lg .signature__name {
+  font-size: clamp(2.5rem, 1.7rem + 4vw, 4.6rem);
+}
+
+.signature--lg .signature__flourish {
+  width: min(300px, 74%);
+}
+
+.signature--lg .signature__line {
+  margin-block-start: clamp(0.9rem, 3vw, 1.4rem);
+  font-size: clamp(0.85rem, 0.7rem + 0.8vw, 1.15rem);
+}
+
+.signature--lg .signature__whisper {
+  margin-block-start: clamp(0.7rem, 2.4vw, 1.1rem);
+  max-width: 44ch;
+  text-align: center;
+}
+
+/* ── tints: on the dark, gold and cream ────────────────────────────── */
+.signature {
+  color: var(--gold);
+}
+
+.signature__eyebrow,
+.signature__whisper {
+  color: var(--blush);
+  opacity: 0.86;
+}
+
+.signature__line {
+  color: var(--cream);
+}
+
+/* ── tints: on paper, ink and burgundy (gold is too light on cream) ── */
+.signature--paper {
+  color: #8d5f3f;
+}
+
+.signature--paper .signature__name {
+  color: var(--burgundy);
+}
+
+.signature--paper .signature__eyebrow,
+.signature--paper .signature__whisper {
+  color: var(--ink-soft);
+  opacity: 1;
+}
+
+.signature--paper .signature__line {
+  color: var(--burgundy);
+}
+
+@media (max-width: 420px) {
+  .signature__name {
+    white-space: normal;
+  }
+  .signature--lg .signature__line {
+    letter-spacing: 0.22em;
+  }
+}

@@ -1,0 +1,178 @@
+/* ══════════════════════════════════════════════════════════════════
+   The six drawings. Each frame sets its own ink colour (currentColor)
+   and its own wash; the gold accents live inside the SVG.
+   Motion is deliberately tiny — these are quiet pictures, not screensavers.
+   ══════════════════════════════════════════════════════════════════ */
+
+.memory-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* the four washes a frame can sit on */
+.memory-art--gold {
+  color: #6b4e28;
+  background:
+    radial-gradient(85% 60% at 50% 74%, rgba(216, 183, 122, 0.42), transparent 68%),
+    linear-gradient(168deg, #f9efe0, #f1e2cb 58%, #f8efe4);
+}
+
+.memory-art--rose {
+  color: #8a4260;
+  background:
+    radial-gradient(85% 60% at 50% 74%, rgba(235, 198, 211, 0.72), transparent 68%),
+    linear-gradient(168deg, #f9e9ef, #f0dbe4 58%, #f8ece7);
+}
+
+.memory-art--plum {
+  color: #4a2135;
+  background:
+    radial-gradient(90% 65% at 50% 20%, rgba(66, 27, 45, 0.16), transparent 62%),
+    linear-gradient(168deg, #f2e7ec, #e6d8e1 58%, #f1e6e6);
+}
+
+.memory-art--cream {
+  color: #573a4d;
+  background:
+    radial-gradient(85% 60% at 50% 74%, rgba(255, 253, 252, 0.9), transparent 70%),
+    linear-gradient(168deg, #f9f3ec, #f1e8e1 58%, #f7f0e9);
+}
+
+/* every scene element animates from its own centre */
+.memory-art g {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .memory-art__drift {
+    animation: art-drift 9s var(--ease-soft) infinite;
+  }
+  .memory-art__float {
+    animation: art-float 11s var(--ease-soft) infinite;
+  }
+  .memory-art__twinkle circle {
+    animation: art-twinkle 5.5s var(--ease-soft) infinite;
+  }
+  .memory-art__twinkle circle:nth-child(2) {
+    animation-delay: 1.4s;
+  }
+  .memory-art__twinkle circle:nth-child(3) {
+    animation-delay: 2.8s;
+  }
+  .memory-art__twinkle circle:nth-child(4) {
+    animation-delay: 4s;
+  }
+  .memory-art__sway {
+    animation: art-sway 12s var(--ease-soft) infinite;
+  }
+  .memory-art__rain {
+    animation: art-rain 2.6s linear infinite;
+  }
+  .memory-art__flicker {
+    animation: art-flicker 3.4s var(--ease-soft) infinite;
+  }
+  .memory-art__pulse {
+    animation: art-pulse 7s var(--ease-soft) infinite;
+  }
+  .memory-art__lift {
+    animation: art-lift 10s var(--ease-soft) infinite;
+  }
+}
+
+@keyframes art-drift {
+  0%,
+  100% {
+    transform: translateX(-2px);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(2px);
+    opacity: 1;
+  }
+}
+
+@keyframes art-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(5px, -4px);
+  }
+}
+
+@keyframes art-twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes art-sway {
+  0%,
+  100% {
+    transform: rotate(-1.4deg);
+  }
+  50% {
+    transform: rotate(1.4deg);
+  }
+}
+
+@keyframes art-rain {
+  0% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  25%,
+  70% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+}
+
+@keyframes art-flicker {
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 0.85;
+  }
+  35% {
+    transform: scaleY(1.08) scaleX(0.96);
+    opacity: 1;
+  }
+  65% {
+    transform: scaleY(0.95) scaleX(1.03);
+    opacity: 0.75;
+  }
+}
+
+@keyframes art-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+@keyframes art-lift {
+  0%,
+  100% {
+    transform: translateY(1px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}

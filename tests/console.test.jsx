@@ -43,7 +43,7 @@ describe('the browser console', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     void dialog;
 
-    const frame = (await screen.findAllByRole('button', { name: /empty frame/i }))[0];
+    const frame = (await screen.findAllByRole('button', { name: /open frame:/i }))[0];
     await user.click(frame);
     await user.keyboard('{ArrowRight}');
     await user.keyboard('{Escape}');

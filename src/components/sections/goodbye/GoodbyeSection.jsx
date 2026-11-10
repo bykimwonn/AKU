@@ -5,6 +5,7 @@ import siteConfig from '../../../config/site.config.js';
 import { interpolate } from '../../../utils/text.js';
 import { describeBirthday } from '../../../utils/date.js';
 import { EASE, Reveal } from '../../ui/Reveal.jsx';
+import { Signature } from '../../ui/Signature.jsx';
 import './goodbye.css';
 
 /**
@@ -78,7 +79,11 @@ export function GoodbyeSection({ onReplay }) {
           {interpolate(goodbye.line2)}
         </Reveal>
 
-        <Reveal className="goodbye__actions" y={18} delay={0.4}>
+        <Reveal className="goodbye__sign" y={26} blur={9} delay={0.34}>
+          <Signature size="lg" />
+        </Reveal>
+
+        <Reveal className="goodbye__actions" y={18} delay={0.5}>
           <button type="button" className="btn-solid" onClick={onReplay}>
             <RotateCcw size={15} strokeWidth={1.9} aria-hidden="true" />
             {interpolate(goodbye.replayLabel)}

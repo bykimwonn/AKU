@@ -75,6 +75,8 @@ export default function App() {
 
       if (event.altKey && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
         event.preventDefault();
+        // A letter or gift on screen is modal: close it first, then move.
+        if (dialogOpen && entered) return;
         if (!entered) {
           if (event.key === 'ArrowDown') enter();
           return;

@@ -8,6 +8,7 @@ import { SectionShell } from '../../ui/SectionShell.jsx';
 import { Overlay } from '../../ui/Overlay.jsx';
 import { EASE, Reveal } from '../../ui/Reveal.jsx';
 import { Stagger, StaggerItem } from '../../ui/Stagger.jsx';
+import { Signature } from '../../ui/Signature.jsx';
 import './envelope.css';
 
 /**
@@ -151,11 +152,13 @@ export function EnvelopeSection({ onJump }) {
               type="button"
               className="btn-ghost"
               onClick={() => {
+                // Close first: the jump is handed to the lock so it lands on
+                // the gallery instead of being undone by the unlock.
                 setLetterOpen(false);
                 onJump?.('gallery');
               }}
             >
-              Keep going
+              {interpolate(envelope.continueLabel || 'Keep going')}
               <ArrowRight size={15} strokeWidth={1.8} aria-hidden="true" />
             </button>
           </>
@@ -183,9 +186,10 @@ export function EnvelopeSection({ onJump }) {
 
             <StaggerItem as="p" className="letter__signoff">
               <span className="letter__signoff-line">{envelope.signOff}</span>
-              {siteConfig.sender?.name ? (
-                <span className="letter__signoff-name u-hand">{siteConfig.sender.name}</span>
-              ) : null}
+            </StaggerItem>
+
+            <StaggerItem as="div">
+              <Signature tone="paper" />
             </StaggerItem>
           </Stagger>
         </article>

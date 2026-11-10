@@ -1,24 +1,22 @@
 import { useMemo, useState } from 'react';
 import siteConfig from '../../../config/site.config.js';
-import { buildGallery } from '../../../utils/photos.js';
+import { buildGallery } from '../../../utils/gallery.js';
 import { SectionShell } from '../../ui/SectionShell.jsx';
 import { Reveal } from '../../ui/Reveal.jsx';
 import { PolaroidCard } from './PolaroidCard.jsx';
 import { Lightbox } from './Lightbox.jsx';
 import './gallery.css';
 
-const IS_DEV = import.meta.env.DEV;
-
 /**
- * SECTION 3 — the memory gallery.
+ * SECTION 3 — the gallery of frames.
  *
- * Photographs are discovered automatically from src/assets/photos/ (see
- * utils/photos.js). Until someone drops files in there, the grid shows honest
- * empty frames instead of somebody else's face.
+ * Six drawings, six sentences, all written and drawn for her. They sit on a
+ * dark wall like polaroids: taped, slightly crooked, straightening when she
+ * touches one, opening into a viewer when she taps it.
  */
 export function GallerySection() {
   const gallery = siteConfig.gallery;
-  const { items, hasPhotos } = useMemo(() => buildGallery(siteConfig), []);
+  const { items } = useMemo(() => buildGallery(siteConfig), []);
   const [openIndex, setOpenIndex] = useState(-1);
 
   const isOpen = openIndex >= 0;
@@ -45,17 +43,10 @@ export function GallerySection() {
         ))}
       </ul>
 
-      {hasPhotos ? (
+      {items.length > 1 ? (
         <Reveal as="p" className="gallery__foot" y={12} blur={3}>
-          {items.length} {items.length === 1 ? 'frame' : 'frames'} — tap any of them to see it
-          properly.
+          {items.length} frames on the wall — tap any of them to step closer.
         </Reveal>
-      ) : null}
-
-      {IS_DEV && !hasPhotos ? (
-        <p className="gallery__ownernote" role="note">
-          {gallery.ownerNote}
-        </p>
       ) : null}
 
       <Lightbox

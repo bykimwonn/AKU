@@ -53,6 +53,12 @@
   max-width: 26ch;
 }
 
+.goodbye__sign {
+  display: grid;
+  justify-items: center;
+  margin-block-start: clamp(1.8rem, 6vw, 3.2rem);
+}
+
 .goodbye__actions {
   display: grid;
   justify-items: center;

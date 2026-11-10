@@ -4,12 +4,13 @@ import { usePrefersReducedMotion } from '../../../hooks/usePrefersReducedMotion.
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Overlay } from '../../ui/Overlay.jsx';
 import { EASE } from '../../ui/Reveal.jsx';
-import { EmptyFrame } from './PolaroidCard.jsx';
+import { MemoryArt } from './MemoryArt.jsx';
 import './gallery.css';
 
 /**
- * The expanded photograph: previous / next, a caption, a counter, arrow keys,
- * and a swipe on touch screens. One item? The arrows politely disappear.
+ * The expanded frame: the drawing large, the sentence under it, previous / next
+ * buttons, a counter, arrow keys and a swipe on touch screens. One frame only?
+ * The arrows politely disappear.
  */
 export function Lightbox({ open, items = [], index = 0, onClose, onStep }) {
   const reduced = usePrefersReducedMotion();
@@ -58,9 +59,9 @@ export function Lightbox({ open, items = [], index = 0, onClose, onStep }) {
       onClose={onClose}
       tone="night"
       size="photo"
-      eyebrow={item.placeholder ? 'Empty frame' : `Memory ${index + 1} of ${items.length}`}
-      title={item.caption}
-      closeLabel="Close the photograph"
+      eyebrow={`Frame ${index + 1} of ${items.length}`}
+      title={item.title}
+      closeLabel="Close the frame"
     >
       <div className="lightbox" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <div className="lightbox__stage">
@@ -69,34 +70,23 @@ export function Lightbox({ open, items = [], index = 0, onClose, onStep }) {
               type="button"
               className="lightbox__btn lightbox__side lightbox__side--prev"
               onClick={() => step(-1)}
-              aria-label="Previous photograph"
+              aria-label="Previous frame"
             >
               <ChevronLeft size={20} strokeWidth={1.6} aria-hidden="true" />
             </button>
           ) : null}
 
           <AnimatePresence initial={false} mode="wait">
-            <motion.div
+            <motion.figure
               key={item.id}
-              className="lightbox__media"
+              className="lightbox__art"
               initial={reduced ? false : { opacity: 0, x: direction >= 0 ? 44 : -44 }}
               animate={{ opacity: 1, x: 0 }}
               exit={reduced ? undefined : { opacity: 0, x: direction >= 0 ? -44 : 44 }}
               transition={{ duration: reduced ? 0 : 0.5, ease: EASE }}
             >
-              {item.placeholder ? (
-                <div className="lightbox__empty">
-                  <EmptyFrame tone={item.tone} />
-                </div>
-              ) : (
-                <img
-                  className="lightbox__img"
-                  src={item.src}
-                  alt={item.alt || item.caption}
-                  draggable="false"
-                />
-              )}
-            </motion.div>
+              <MemoryArt art={item.art} tone={item.tone} />
+            </motion.figure>
           </AnimatePresence>
 
           {many ? (
@@ -104,7 +94,7 @@ export function Lightbox({ open, items = [], index = 0, onClose, onStep }) {
               type="button"
               className="lightbox__btn lightbox__side lightbox__side--next"
               onClick={() => step(1)}
-              aria-label="Next photograph"
+              aria-label="Next frame"
             >
               <ChevronRight size={20} strokeWidth={1.6} aria-hidden="true" />
             </button>
@@ -112,8 +102,7 @@ export function Lightbox({ open, items = [], index = 0, onClose, onStep }) {
         </div>
 
         <figcaption className="lightbox__caption">
-          <span className="lightbox__caption-text">{item.caption}</span>
-          {item.date ? <span className="lightbox__caption-date">{item.date}</span> : null}
+          {item.line ? <p className="lightbox__line">{item.line}</p> : null}
           {items.length > 1 ? (
             <span className="lightbox__counter">
               {index + 1} / {items.length}
@@ -127,7 +116,7 @@ export function Lightbox({ open, items = [], index = 0, onClose, onStep }) {
               type="button"
               className="lightbox__btn"
               onClick={() => step(-1)}
-              aria-label="Previous photograph"
+              aria-label="Previous frame"
             >
               <ChevronLeft size={20} strokeWidth={1.6} aria-hidden="true" />
             </button>
@@ -135,7 +124,7 @@ export function Lightbox({ open, items = [], index = 0, onClose, onStep }) {
               type="button"
               className="lightbox__btn"
               onClick={() => step(1)}
-              aria-label="Next photograph"
+              aria-label="Next frame"
             >
               <ChevronRight size={20} strokeWidth={1.6} aria-hidden="true" />
             </button>
