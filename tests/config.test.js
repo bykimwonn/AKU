@@ -26,6 +26,7 @@ describe('the personalisation config', () => {
       'letter.title': siteConfig.letter.title,
       'gallery.title': siteConfig.gallery.title,
       'cake.headline': siteConfig.cake.headline,
+      'cake.dragHint': siteConfig.cake.dragHint,
       'cake.message': siteConfig.cake.message,
       'goodbye.line1': siteConfig.goodbye.line1,
       'goodbye.line2': siteConfig.goodbye.line2,

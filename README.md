@@ -25,7 +25,7 @@ Live site: **https://bykimwonn.github.io/AKU/** (GitHub Pages, built from `dist/
 | 3 | Six frames | Six original line drawings taped to a dark wall — crooked until touched, then opening into a viewer with prev/next, arrow keys and swipe. Each carries one sentence. | `gallery` |
 | 4 | Things I Don't Always Say… | The long letter on paper: drop cap, 1.95 line-height, paragraphs that settle as they arrive. | `letter` |
 | 5 | Three gifts | Three boxes; the lid and bow fly off and light spills out. Each reveal is different — lines write themselves out, a creased note unfolds, wishes rise with sparks. | `gifts` |
-| 6 | The cake | Two tiers, dripping frosting, candles flickering on their own timings. Tap one out for a curl of smoke or blow the whole row in one gust → confetti, petals, the final message. Any candle can be relit. | `cake` |
+| 6 | The cake | A **real 3D cake** — she can drag it round with a finger to see the candles on the far side. Two tiers of frosting with dripping icing, gold sprinkles, a glass plate, candles that flicker on their own timings. Tap one out for a curl of smoke, or blow the whole row in one gust → confetti, petals, the final message. Any candle can be relit. | `cake` |
 | 7 | Goodbye | A constellation draws itself, the closing lines, **the signature**, and a replay button. | `goodbye`, `signature` |
 
 Always present: a header with a **Chapters** menu, the **music player**, a gold reading-progress
@@ -74,6 +74,26 @@ Each frame is `{ id, art, tone, title, line }`. `art` chooses the drawing —
 `dawn · night · bloom · letters · storm · wish` — and `tone` the wash (`gold · rose · plum ·
 cream`). An unknown `art` falls back to `wish`, so a typo can never show her a blank card.
 Add or remove frames freely: the grid, the counter and the prev/next buttons all follow.
+
+### The cake
+
+The cake is modelled, not drawn: a ring of thin faces stands each cylinder, the flames counter-rotate
+to stay facing her, and the shading comes from a cosine of the angle to a virtual key light. It scales
+from phone to desktop off one CSS unit, so nothing about it is resolution-dependent.
+
+Everything she can reasonably change stays in `cake`:
+
+| Key | What it does |
+| --- | --- |
+| `candleCount` | candles on the top tier, clamped to 1–9 |
+| `dragHint` | the "drag to turn it" line under the cake; set it to `''` to hide the line entirely |
+| `headline`, `subtitle`, `prompt`, `message`, `relightLabel` | the words around it |
+
+The proportions live in one object — `LAYOUT` in `src/components/sections/cake/cake3d.js`. Radii,
+heights and counts are coefficients of that single unit (`r: 1.02` means 1.02 × `--u`), and the tiers
+and the candle ring both read the same `base` numbers, so if you make the bottom tier taller the
+candles move with it instead of floating. `candleCount` is the only thing you need to touch to change
+how many candles there are.
 
 ### Music
 
@@ -149,6 +169,9 @@ Netlify/Render and put a password on it.
 - `M` toggles the music.
 - `Esc` closes any open letter, gift or frame.
 - `←` / `→` step through the gallery frames; on a phone you can swipe.
+- Focus the cake and `←` / `→` turn it, `↑` / `↓` tilt it (a plain `Tab` reaches each candle;
+  `Alt` is left alone so the chapter shortcut keeps working). On a phone a horizontal drag turns
+  the cake and a vertical swipe still scrolls the page.
 - A skip link appears for keyboard users, focus is trapped inside overlays and returned to the
   control that opened them, and every interactive thing is a real `<button>`.
 
@@ -156,12 +179,16 @@ Netlify/Render and put a password on it.
 
 ## 6. What was actually verified
 
-- `npm run test:run` → **45 passing**: the opening gate, the envelope (open, re-read, `Esc`),
+- `npm run test:run` → **63 passing**: the opening gate, the envelope (open, re-read, `Esc`),
   the gallery (frames, opening, arrow-key stepping, the sentence inside, no broken `<img>`),
   all three gifts opening and closing, candles one-by-one *and* in a gust, the celebration,
   relighting, chapter jumps, the player's play/pause/volume/mute and pause-persistence, the
   config contract (a missing required field fails, naming itself), and the reduced-motion path
-  through the same interactions.
+  through the same interactions. The cake has its own file: one test group checks the geometry the
+  3D cake is built from (the tiers stack exactly, the candles stand on the icing, no face of the
+  cake goes black), and another drives the real interactions — a drag turns it, the arrow keys
+  turn it, the hint hides the first time she touches it, and reduced motion parks the unattended
+  spin while leaving the drag and the candles working.
 - A dedicated test walks the entire site and fails on **any** `console.error` or `console.warn`.
 - `npm run build` succeeds; every `url()` and font referenced by the built CSS resolves, and the
   asset paths are relative so a sub-path deploy works.
@@ -178,7 +205,8 @@ src/
   config/site.config.js ← every word on the site, including the signature
   config/sections.js    ← the chapter list the nav and shortcuts read
   styles/               ← tokens.css (palette, type scale), base, buttons, app
-  hooks/                ← music engine, active section, canvas layers, scroll lock, reduced motion
+  hooks/                ← music engine, active section, canvas layers, scroll lock, reduced
+                          motion, cake orbit (drag / inertia / keyboard → CSS variables)
   utils/                ← text tokens, birthday dates, gallery builder, confetti
   audio/ambientEngine.js← the generative loop (Web Audio)
   components/ui/        ← SectionShell, Overlay, Reveal, Stagger, Signature, MusicPlayer, TopBar,
@@ -187,6 +215,11 @@ src/
   components/sections/  ← welcome, envelope, gallery, letter, gifts, cake, goodbye
                           (each component owns its own .css; the gallery's drawings live in
                            gallery/MemoryArt.jsx)
+  components/sections/cake/
+    cake3d.js           ← the cake's maths: proportions, strip rings, lighting, candle ring
+    CakeBody.jsx        ← the geometry in the DOM: tiers, icing, sprinkles, plate, light pool
+    Candle.jsx          ← one candle as a real button, billboarded to face the viewer
+    cake3d.css          ← the 3D world (perspective, faces, flames); cake.css is the copy around it
 tests/                  ← experience, music, console, config
 ```
 
@@ -200,6 +233,10 @@ Two conventions worth knowing before editing:
   element — a wrapper owns the CSS transform, the inner element owns Framer's.
 - Reduced motion is read through `src/hooks/usePrefersReducedMotion.js` everywhere, never
   directly from the media query or from Framer's hook alone.
+- Per-frame 3D motion writes **CSS variables on one stage element** (`useCakeOrbit`), never React
+  state — a `setState` per frame would re-render the whole cake sixty times a second. And nothing
+  between `.cake3d` and a face may use `filter` or `overflow: hidden`, because either one flattens
+  `transform-style: preserve-3d` and the cake goes flat.
 
 ---
 

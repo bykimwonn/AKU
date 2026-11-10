@@ -309,6 +309,95 @@ describe('the cake', () => {
   });
 });
 
+describe('the 3D cake', () => {
+  const yawOf = (stage) => Number.parseFloat(stage.style.getPropertyValue('--yaw') || '0');
+
+  async function readyCake(user) {
+    renderExperience();
+    await openExperience(user);
+    const stage = await screen.findByRole('group', { name: /birthday cake/i });
+    await waitFor(() => expect(stage.style.getPropertyValue('--yaw')).toBeTruthy());
+    return stage;
+  }
+
+  it('turns under her finger', async () => {
+    const user = userEvent.setup();
+    const stage = await readyCake(user);
+
+    expect(stage).toHaveAttribute('data-spin', 'on');
+    const before = yawOf(stage);
+
+    stage.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, clientX: 40, buttons: 1 }));
+    await waitFor(() => expect(stage).toHaveClass('is-grabbing'));
+
+    stage.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: 190 }));
+    // 150px of drag is ~63° of turn; the idle drift alone moves under 3° a second
+    await waitFor(() => expect(Math.abs(yawOf(stage) - before)).toBeGreaterThan(20), {
+      timeout: 3000,
+    });
+
+    stage.dispatchEvent(new MouseEvent('pointerup', { bubbles: true, clientX: 190 }));
+    await waitFor(() => expect(stage).not.toHaveClass('is-grabbing'));
+  });
+
+  it('hides the drag hint the first time she touches it', async () => {
+    const user = userEvent.setup();
+    const stage = await readyCake(user);
+    const cue = document.querySelector('.cake3d__cue');
+    expect(cue).toHaveTextContent(/drag the cake/i);
+    expect(cue).not.toHaveClass('is-hidden');
+
+    await user.click(screen.getByRole('button', { name: /candle 1 of/i }));
+    stage.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, clientX: 20, buttons: 1 }));
+    await waitFor(() => expect(document.querySelector('.cake3d__cue')).toHaveClass('is-hidden'));
+  });
+
+  it('turns with the arrow keys too, and never steals the chapter shortcut', async () => {
+    const user = userEvent.setup();
+    const stage = await readyCake(user);
+    const before = yawOf(stage);
+
+    stage.focus();
+    await user.keyboard('{ArrowLeft}');
+    await waitFor(() => expect(Math.abs(yawOf(stage) - before)).toBeGreaterThan(12), { timeout: 3000 });
+
+    // Alt+↓ is the site's "next chapter" chord, so the cake must not turn for it.
+    // Let the cake settle first: it eases toward its target and drifts slowly on
+    // its own, so an exact-equality check here would be a race, not a test.
+    await new Promise((resolve) => setTimeout(resolve, 420));
+    const altBefore = yawOf(stage);
+    await user.keyboard('{Alt>}{ArrowDown}{/Alt>}');
+    await new Promise((resolve) => setTimeout(resolve, 420));
+    // a real nudge would be 24°; nothing but the idle drift should have happened
+    expect(Math.abs(yawOf(stage) - altBefore)).toBeLessThan(12);
+  });
+
+  it('stands the candles around the icing as real buttons', async () => {
+    const user = userEvent.setup();
+    await readyCake(user);
+
+    const slots = document.querySelectorAll('.candle-slot');
+    const candles = await screen.findAllByRole('button', { name: /candle \d of 5 — lit/i });
+    expect(slots).toHaveLength(5);
+    expect(candles).toHaveLength(5);
+    // each slot is rotated to its place on the ring, so the angles differ
+    const angles = [...slots].map((slot) => slot.style.getPropertyValue('--a'));
+    expect(new Set(angles).size).toBe(5);
+    // the geometry itself is decoration: it must never intercept a click
+    expect(document.querySelector('.geo')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('lets the whole cake go out without losing the wish', async () => {
+    const user = userEvent.setup();
+    await readyCake(user);
+
+    await user.click(screen.getByRole('button', { name: /blow them all out/i }));
+    await screen.findByRole('heading', { name: /happy birthday, akudzweishe/i }, { timeout: 3000 });
+    expect(document.querySelector('.cake3d')).toHaveClass('is-done');
+    expect(await screen.findAllByRole('button', { name: /light it again/i })).toHaveLength(5);
+  });
+});
+
 describe('the goodbye', () => {
   it('plays the whole thing again', async () => {
     const user = userEvent.setup();
@@ -401,7 +490,12 @@ describe('reduced motion', () => {
     await user.click(within(dialog).getByRole('button', { name: /close the letter/i }));
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
 
-    // 3. the candles still go out, and the wish still arrives
+    // 3. the cake does not turn by itself, but she can still turn it
+    const stage = document.querySelector('.cake3d');
+    expect(stage).toHaveAttribute('data-spin', 'off');
+    expect(stage).toHaveAttribute('tabindex', '0');
+
+    // 4. the candles still go out, and the wish still arrives
     await user.click(await screen.findByRole('button', { name: /blow them all out/i }));
     expect(
       await screen.findByRole('heading', { name: /happy birthday, akudzweishe/i }),

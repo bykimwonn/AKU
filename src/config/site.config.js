@@ -236,6 +236,8 @@ export const siteConfig = {
     subtitle: 'Make a wish, {short}, then blow out the candles — or tap them one by one.',
     /** How many candles on the cake. 1–9 works best on small screens. */
     candleCount: 5,
+    /** Shown under the cake until she touches it. */
+    dragHint: 'Drag the cake to turn it — the far side has candles too',
     /** Shown on the cake before the candles are out. */
     prompt: 'Something is missing. The candles are still lit.',
     /** Shown after every candle is out. */
